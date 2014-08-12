@@ -13,10 +13,13 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
-
+*.class
 # =========================
 # Operating System Files
 # =========================
+build
+ext
+resources
 
 # OSX
 # =========================
