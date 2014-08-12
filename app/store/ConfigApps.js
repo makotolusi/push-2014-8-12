@@ -1,14 +1,13 @@
-Ext.define('Push.store.ContentTypes', {
+Ext.define('Push.store.ConfigApps', {
 	extend : 'Ext.data.Store',
 	alias : 'store.Apps',
-	model : 'Push.model.ContentType',
+	model : 'Push.model.ConfigApp',
 	autoLoad : true,
 	pageSize : 30,
 	requires : ['Push.util.Global'],
-	storeId : 'contentTypes',
 	proxy : {
 		type : 'ajax',
-		url : Push.util.Global.ROOT_URL + '/web/contentType/list',
+		url : Push.util.Global.ROOT_URL + '/web/configapps/list',
 		paramsAsJson : true,
 		actionMethods : {
 			read : "POST",
@@ -21,7 +20,7 @@ Ext.define('Push.store.ContentTypes', {
 		},
 		reader : {
 			type : 'json',
-			rootProperty : 'page.content',
+			rootProperty:'page.content',
 			totalProperty : 'page.rowCount'
 		},
 		writer : {

@@ -44,6 +44,7 @@ Ext.define('Push.view.user.MenuForm', {
 			if (win.url == '/web/operation/update') {
 				formValue.id = win.opId;
 			}
+			console.log(formValue);
 			if (form.isValid()) {
 				Ext.Ajax.request({
 					url : Push.util.Global.ROOT_URL + win.url,

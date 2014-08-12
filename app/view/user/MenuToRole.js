@@ -12,7 +12,7 @@ Ext.define('Push.view.user.MenuToRole', {
 		path : 'app/model/Operation.js'
 	}],
 	//</example>
-
+requires : ['Push.util.Global'],
 	width : 1000,
 	height : 600,
 	layout : {
@@ -42,7 +42,7 @@ Ext.define('Push.view.user.MenuToRole', {
 					type : 'json',
 					rootProperty : 'data'
 				},
-				url : ROOT_URL + '/web/operation/listRoleOperation'
+				url : Push.util.Global.ROOT_URL + '/web/operation/listRoleOperation'
 			}
 		});
 		var group1 = this.id + 'group1', group2 = this.id + 'group2', columns = [{
@@ -118,7 +118,7 @@ Ext.define('Push.view.user.MenuToRole', {
 							ids.push(data.records[i].get('id'));
 						}
 						Ext.Ajax.request({
-							url : ROOT_URL + '/web/operation/addRoles',
+							url : Push.util.Global.ROOT_URL + '/web/operation/addRoles',
 							method : 'POST',
 							params : {
 								roleId : me.roleId,
@@ -159,7 +159,7 @@ Ext.define('Push.view.user.MenuToRole', {
 						type : 'json',
 						rootProperty : 'data'
 					},
-					url : ROOT_URL + '/web/operation/listRoleOperation'//+me.roleId
+					url : Push.util.Global.ROOT_URL + '/web/operation/listRoleOperation'//+me.roleId
 				}
 			}),
 			columns : columns,

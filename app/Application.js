@@ -10,13 +10,13 @@ Ext.define('Push.Application', {
 	namespace : 'Push',
 	requires : ['Push.view.login.Login'],
 
-	views : ['config.ContentTypeList','config.ContentTypeForm','login.Login', 'form.FieldTypes', 'user.MenuManager', 'user.RoleManager', 'user.MenuToRole', 'collection.CollectionList', 'collection.CollectionTabs', 'collection.CollectionPanel', 'app.AppList', 'push.PushList', 'push.PushListTabs', 'navigation.Breadcrumb', 'Header', 'ContentPanel', 'navigation.Tree', 'grid.ArrayGrid', 'grid.Paging', 'grid.GridPlugins', 'form.HBoxLayoutForm', 'form.RadioGroupForm'],
+	views : ['config.ConfigAppsList','config.ContentTypeList','config.ContentTypeForm','login.Login', 'form.FieldTypes', 'user.MenuManager', 'user.RoleManager', 'user.MenuToRole', 'collection.CollectionList', 'collection.CollectionTabs', 'collection.CollectionPanel', 'app.AppList', 'push.PushList', 'push.PushListTabs', 'navigation.Breadcrumb', 'Header', 'ContentPanel', 'navigation.Tree', 'grid.ArrayGrid', 'grid.Paging', 'grid.GridPlugins', 'form.HBoxLayoutForm', 'form.RadioGroupForm'],
 
 	controllers : ['Global'
 	// TODO: add controllers here
 	],
 
-	stores : ['Navigation','States', 'Roles', 'Operations','Apps'],
+	stores : ['ContentTypes','Navigation','States', 'Roles', 'Operations','Apps'],
 
 	model : ['State','MenuTree'],
 

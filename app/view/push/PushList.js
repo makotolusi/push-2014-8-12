@@ -64,7 +64,6 @@ Ext.define('Push.view.push.PushList', {
 			},
 			scope : this
 		});
-		console.log('push-list-grid-' + this.pushType);
 		Ext.apply(this, {
 			id : 'push-list-grid-' + this.pushType,
 			store : store,
@@ -83,8 +82,9 @@ Ext.define('Push.view.push.PushList', {
 					// iconCls : 'add'
 				}, {
 					text : '创建推送',
-					handler : function() {
+					handler : function(a) {
 						var win = Ext.create('Push.view.push.PushForm');
+						win.setPosition(a.getX()-200, a.getY()-100);
 						win.show();
 					}
 				}]

@@ -1,24 +1,23 @@
 /**
  * This example demonstrates using a paging display.
  */
-Ext.define('Push.view.config.ContentTypeList', {
+Ext.define('Push.view.config.ConfigAppsList', {
 	extend : 'Ext.grid.Panel',
 	requires : ['Ext.data.*', 'Ext.grid.*', 'Ext.util.*', 'Ext.toolbar.Paging'],
-	xtype : 'contenttype-list-grid',
-	id : 'contenttype-list-grid',
-	exampleTitle : '类型列表',
+	xtype : 'configapps-list-grid',
+	id : 'configapps-list-grid',
+	exampleTitle : '应用配置列表',
 	requires : ['Push.util.Global'],
 	height : 700,
 	width : 1000,
 	frame : true,
-	title : '类型列表',
+	title : '应用配置列表',
 	disableSelection : true,
 	loadMask : true,
-
 	initComponent : function() {
 		var me = this;
 		// create the Data Store
-		var store = Ext.create('Push.store.ContentTypes');
+		var store = Ext.create('Push.store.ConfigApps');
 		Ext.apply(this, {
 			store : store,
 			columnLines : true,
@@ -31,22 +30,21 @@ Ext.define('Push.view.config.ContentTypeList', {
 				dataIndex : 'name',
 				width : 150
 			}, {
-				text : "英文",
-				dataIndex : 'desc',
-				width : 100
+				text : "所有应用",
+				dataIndex : 'appIds',
+				width : 300,
 			}, {
-				text : "标识",
-				dataIndex : 'index',
-				width : 100
+				text : "内容类型",
+				dataIndex : 'contentTypes',
+				renderer : function(value) {
+					var dd = '';
+					Ext.Array.each(value, function(name, index, countriesItSelf) {
+						dd += name.name + ",";
+					});
+					return dd;
+				},
+				width : 350,
 			}, {
-				text : "子类型",
-				dataIndex : 'subContentType',
-				width : 300
-			}, {
-				text : "来源",
-				dataIndex : 'resourceUri',
-				width : 200
-			},{
 				menuDisabled : true,
 				text : "操作",
 				sortable : false,
@@ -60,7 +58,7 @@ Ext.define('Push.view.config.ContentTypeList', {
 							if (btn == 'yes') {
 								var rec = grid.getStore().getAt(rowIndex);
 								Ext.Ajax.request({
-									url : Push.util.Global.ROOT_URL + '/web/contentType/delete',
+									url : Push.util.Global.ROOT_URL + '/web/configapps/delete',
 									method : 'POST',
 									headers : {
 										'Content-Type' : 'application/json; charset=utf-8'
@@ -82,21 +80,23 @@ Ext.define('Push.view.config.ContentTypeList', {
 									}
 								});
 							}
-						});
+						}, this);
 					}
 				}, {
 					iconCls : 'grid-edit',
 					tooltip : '更新',
 					handler : function(grid, rowIndex, colIndex) {
 						var rec = grid.getStore().getAt(rowIndex);
-						var win = Ext.create('Push.view.config.ContentTypeForm', {
-							url : '/web/contentType/update',
-							ctId : rec.get('id'),
-							ctIndex : rec.get('index'),
-							ctDesc : rec.get('desc'),
-							ctName : rec.get('name'),
-							resourceUri : rec.get('resourceUri'),
-							code : rec.get('code')
+						var ca = [];
+						Ext.Array.each(rec.get('contentTypes'), function(name, index, countriesItSelf) {
+							ca.push(name.id);
+						});
+						var win = Ext.create('Push.view.config.ConfigAppsForm', {
+							url : '/web/configapps/update',
+							caId : rec.get('id'),
+							caName : rec.get('name'),
+							caAppIds : rec.get('appIds'),
+							caContentTypes : ca
 						});
 						win.show();
 					}
@@ -110,8 +110,8 @@ Ext.define('Push.view.config.ContentTypeList', {
 					text : '新增',
 					iconCls : 'add',
 					handler : function() {
-						var win = Ext.create('Push.view.config.ContentTypeForm', {
-							url : '/web/contentType/create'
+						var win = Ext.create('Push.view.config.ConfigAppsForm', {
+							url : '/web/configapps/create'
 						});
 						win.show();
 					}

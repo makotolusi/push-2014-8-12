@@ -14,29 +14,35 @@ Ext.define('Push.view.config.ContentTypeForm', {
 				id : 'contenttype-add-form',
 				items : [{
 					xtype : 'textfield',
-					name : 'ctName',
+					name : 'name',
 					fieldLabel : '名称',
-					value : me.opName,
+					value : me.ctName,
 					allowBlank : false
 				}, {
 					xtype : 'textfield',
 					name : 'index',
 					fieldLabel : '标识',
-					value : me.opName,
+					value : me.ctIndex,
 					allowBlank : false
 				},{
-					xtype : 'textarea',
+					xtype : 'textfield',
 					name : 'desc',
-					fieldLabel : '描述',
-					value : me.opName,
+					fieldLabel : '英文',
+					value : me.ctDesc,
 					allowBlank : true
 				}, {
 					vtype : 'url',
 					xtype : 'textfield',
-					name : 'url',
-					value : me.opUrl,
+					name : 'resourceUri',
+					value : me.resourceUri,
 					allowBlank : true,
 					fieldLabel : '来源'
+				}, {
+					xtype : 'textarea',
+					name : 'code',
+					value : me.code,
+					allowBlank : true,
+					fieldLabel : '关联代码'
 				}]
 			}]
 		});
@@ -48,14 +54,16 @@ Ext.define('Push.view.config.ContentTypeForm', {
 			var form = Ext.getCmp('contenttype-add-form');
 			var win = Ext.getCmp('contenttype-add-window');
 			var formValue = form.getValues();
+			if (win.url == '/web/contentType/update') {
+				formValue.id = win.ctId;
+			}
 			console.log(formValue);
 			if (form.isValid()) {
 				Ext.Ajax.request({
-					url : Push.util.Global.ROOT_URL + '/web/contentType/create',
+					url : Push.util.Global.ROOT_URL + win.url ,
 					method : 'POST',
 					headers : {
-						'Content-Type' : 'application/json; charset=utf-8',
-							'Accept' : 'application/json'
+						'Content-Type' : 'application/json; charset=utf-8'
 					},
 					jsonData : formValue,
 					success : function(response) {

@@ -128,7 +128,7 @@ Ext.define('Push.view.user.MenuManager', {
 									}, this);
 								} else {
 									Ext.Ajax.request({
-										url : ROOT_URL + '/web/operation/delete',
+										url : Push.util.Global.ROOT_URL + '/web/operation/delete',
 										method : 'POST',
 										headers : {
 											'Content-Type' : 'application/json; charset=utf-8'
