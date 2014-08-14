@@ -16,7 +16,7 @@ Ext.define('Push.store.Roles', {
 		},
 		reader : {
 			type : 'json',
-			rootProperty : 'data'
+			rootProperty : 'page'
 		},
 		url : Push.util.Global.ROOT_URL + '/web/role/list'
 	}

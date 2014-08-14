@@ -9,7 +9,7 @@ Ext.define('Push.view.config.ContentTypeList', {
 	exampleTitle : '类型列表',
 	requires : ['Push.util.Global'],
 	height : 700,
-	width : 1000,
+	width : 1300,
 	frame : true,
 	title : '类型列表',
 	disableSelection : true,
@@ -33,7 +33,7 @@ Ext.define('Push.view.config.ContentTypeList', {
 			}, {
 				text : "英文",
 				dataIndex : 'desc',
-				width : 100
+				width : 200
 			}, {
 				text : "标识",
 				dataIndex : 'index',
@@ -45,7 +45,7 @@ Ext.define('Push.view.config.ContentTypeList', {
 			}, {
 				text : "来源",
 				dataIndex : 'resourceUri',
-				width : 200
+				width : 450
 			},{
 				menuDisabled : true,
 				text : "操作",

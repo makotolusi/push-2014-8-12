@@ -46,6 +46,18 @@ Ext.define('Push.view.config.ConfigAppsForm', {
 					filterPickList : true,
 					queryMode : 'remote',
 					value : me.caContentTypes,
+				}, {
+					xtype : 'tagfield',
+					id : 'tagTypeTagField',
+					name : 'tagTypes',
+					fieldLabel : '标签类型',
+					store : Ext.create('Push.store.ContentTypes'),
+					displayField : 'name',
+					valueField : 'id',
+					width : 400,
+					filterPickList : true,
+					queryMode : 'remote',
+					value : me.caTagTypes,
 				}]
 			}]
 		});
@@ -61,15 +73,23 @@ Ext.define('Push.view.config.ConfigAppsForm', {
 				formValue.id = win.caId;
 			}
 			var cts = Ext.getCmp('contentTypeTagField').getValue();
+			var tags = Ext.getCmp('tagTypeTagField').getValue();
 			var contentTypes = [];
+			var tagTypes = [];
 			Ext.Array.each(cts, function(name, index, countriesItSelf) {
 				var v = {};
 				v.id = name;
 				contentTypes.push(v);
 			});
+			Ext.Array.each(tags, function(name, index, countriesItSelf) {
+				var v = {};
+				v.id = name;
+				tagTypes.push(v);
+			});
 			formValue.contentTypes = contentTypes;
-			if(formValue.appIds=="")
-				formValue.appIds=[];
+			formValue.tagTypes = tagTypes;
+			if (formValue.appIds == "")
+				formValue.appIds = [];
 			console.log(formValue);
 			if (form.isValid()) {
 				Ext.Ajax.request({

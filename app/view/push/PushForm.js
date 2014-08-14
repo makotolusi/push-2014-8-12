@@ -2,7 +2,7 @@ Ext.define('Push.view.push.PushForm', {
 	extend : 'Ext.window.Window',
 	xtype : 'push-from',
 	alise : 'widget.push-from',
-	requires : ['Ext.form.field.*', 'Push.util.Global'],
+	requires : ['Ext.form.field.*', 'Push.util.Global', 'Push.store.ContentResources'],
 	id : 'push-form-win',
 	title : '创建推送',
 	frame : true,
@@ -11,13 +11,6 @@ Ext.define('Push.view.push.PushForm', {
 	fieldDefaults : {
 		labelWidth : 120
 	},
-	otherContent : [{
-		type : 'Store',
-		path : 'app/store/States.js'
-	}, {
-		type : 'Model',
-		path : 'app/model/State.js'
-	}],
 	initComponent : function() {
 		var me = this;
 		var session1 = Ext.create('Ext.data.Store', {
@@ -40,10 +33,39 @@ Ext.define('Push.view.push.PushForm', {
 					fields : ['index', 'name'],
 					data : configApp.contentTypes
 				});
-				// var codekv={};
-				// Ext.Array.each(configApp.contentTypes, function(name, index, countriesItSelf) {
-				// codekv[name.index]=name.code;
-				// });
+				var tagStore = Ext.create('Push.store.Tags');
+				var index = '';
+				var num = 0;
+				tagStore.load({
+					params : {
+						index : '10002'
+					},
+					scope : this
+				});
+				//-----------------------------------------------------------------
+				var tagField = {
+					xtype : 'tagfield',
+					id : 'tag-tagField',
+					fieldLabel : '标签',
+					store : tagStore,
+					displayField : 'tagName',
+					valueField : 'tagId',
+					queryMode : 'remote',
+					listeners : {
+						'beforequery' : {
+							fn : function(queryPlan, eOpts) {
+								console.log(queryPlan.query);
+								tagStore.load({
+									params : {
+										index : index,
+										serviceName : queryPlan.query
+									},
+									scope : this
+								});
+							}
+						},
+					},
+				};
 				me.add({
 					xtype : 'form',
 					id : 'push-form',
@@ -181,7 +203,8 @@ Ext.define('Push.view.push.PushForm', {
 								margin : '0 0 5 0',
 								items : [{
 									fieldLabel : '推送类型',
-									name : 'contentTypes',
+									id : 'contentType',
+									name : 'p',
 									store : contentTypes,
 									queryMode : 'local',
 									displayField : 'name',
@@ -189,41 +212,52 @@ Ext.define('Push.view.push.PushForm', {
 									listeners : {
 										scope : this,
 										'select' : function(combo, record, index) {
+											var contentResource = Ext.getCmp('contentResource');
+											contentResource.el.animate({
+												opacity : record[0].data.desc == 'NEWS' ? 1 : 0.3
+											});
 											var cc = Ext.getCmp('contentType-config');
-											cc.remove(cc.items.last());
-											cc.add(Ext.decode(record[0].data.code));
+											if (cc.items.length != 1)
+												cc.remove(cc.items.last());
+											if (record[0].data.code != '')
+												cc.add(Ext.decode(record[0].data.code));
 										}
 									},
 									flex : 1
 								}, {
 									fieldLabel : '来源类型',
-									name : 'phone',
+									id : 'contentResource',
+									name : 's',
+									queryMode : 'local',
+									displayField : 'name',
+									valueField : 'uri',
 									style : 'opacity:.3',
-									disabled : true
+									store : Ext.create('Push.store.ContentResources')
+									// disabled : true
 								}]
 							}]
-						}
-						// , {
-						// xtype : 'fieldcontainer',
-						// layout : 'hbox',
-						// combineErrors : true,
-						// defaultType : 'textfield',
-						// items : [{
-						// xtype : 'container',
-						// layout : 'hbox',
-						// defaultType : 'textfield',
-						// margin : '0 0 5 0',
-						// items : [{
-						// fieldLabel : '内容ID或URL',
-						// name : 'email',
-						// flex : 1,
-						// }, {
-						// fieldLabel : '内容标题',
-						// name : 'phone',
-						// }]
-						// }]
-						// }
-						]
+						}/**, {
+						 xtype : 'fieldcontainer',
+						 layout : 'hbox',
+						 combineErrors : true,
+						 defaultType : 'textfield',
+						 items : [{
+						 xtype : 'container',
+						 layout : 'hbox',
+						 defaultType : 'textfield',
+						 margin : '0 0 5 0',
+						 items : [{
+						 fieldLabel : '内容ID',
+						 name : 'i',
+						 id:'auto-code-content-id',
+						 flex : 1,
+						 }, {
+						 fieldLabel : '内容标题',
+						 id:'auto-code-content-name',
+						 name : 't',
+						 }]
+						 }]
+						 }**/]
 					}, {
 						xtype : 'fieldset',
 						title : '用户群',
@@ -239,65 +273,50 @@ Ext.define('Push.view.push.PushForm', {
 						items : [{
 							xtype : 'radiogroup',
 							fieldLabel : '标签类型',
+							id : 'tag-radio',
 							cls : 'x-check-group-alt',
 							columns : [100, 100, 100, 100, 100],
 							vertical : true,
-							items : [{
-								boxLabel : 'Item 1',
-								name : 'rb-custwidth',
-								inputValue : 1
-							}, {
-								boxLabel : 'Item 2',
-								name : 'rb-custwidth',
-								inputValue : 2,
-								checked : true
-							}, {
-								boxLabel : 'Item 3',
-								name : 'rb-custwidth',
-								inputValue : 3
-							}, {
-								boxLabel : 'Item 4',
-								name : 'rb-custwidth',
-								inputValue : 4
-							}, {
-								boxLabel : 'Item 5',
-								name : 'rb-custwidth',
-								inputValue : 5
-							}, {
-								boxLabel : 'Item 5',
-								name : 'rb-custwidth',
-								inputValue : 5
-							}, {
-								boxLabel : 'Item 5',
-								name : 'rb-custwidth',
-								inputValue : 5
-							}, {
-								boxLabel : 'Item 5',
-								name : 'rb-custwidth',
-								inputValue : 5
-							}, {
-								boxLabel : 'Item 5',
-								name : 'rb-custwidth',
-								inputValue : 5
-							}]
-						}, {
-							xtype : 'tagfield',
-							fieldLabel : '标签',
-							store : {
-								type : 'states'
+							listeners : {
+								'change' : {
+									fn : function(ths, newValue, oldValue, eOpts) {
+										index = newValue['tag-radio'];
+										var tagField = Ext.getCmp('tag-tagField');
+										tagStore.load({
+											params : {
+												index : index
+											},
+											scope : this
+										});
+										// tagStore.on("load", function() {
+											// var num = tagStore.getCount();
+											// if (num > 10) {
+												// // var tagField = Ext.getCmp('tag-tagField');
+												// tagField.queryMode = 'local';
+												// console.log(tagField);
+											// }
+										// });
+									}
+								},
 							},
-							reference : 'states',
-							displayField : 'state',
-							valueField : 'abbr',
-							filterPickList : true,
-							queryMode : 'local',
-							publishes : 'value'
-						}]
+							items : []
+						}, tagField]
 					}]
 				});
 				// ====================config=====================
-				var cc = Ext.getCmp('contentType-config');
-				cc.add(Ext.decode(configApp.contentTypes[0].code));
+				// var cc = Ext.getCmp('contentType-config');
+				// cc.add(Ext.decode(configApp.contentTypes[0].code));
+				var tr = Ext.getCmp('tag-radio');
+				Ext.Array.each(configApp.tagTypes, function(obj, index, countriesItSelf) {
+					tr.add({
+						boxLabel : obj.name,
+						name : 'tag-radio',
+						resourceUri : obj.resourceUri,
+						inputValue : obj.index
+					});
+				});
+				/***=========================tag config===========================**/
+				// var store = Ext.create('Push.store.Tags');
 
 			},
 			failure : function(response) {
@@ -330,32 +349,44 @@ Ext.define('Push.view.push.PushForm', {
 			interval.eh = formValue.eh;
 			interval.em = formValue.em;
 			params.interval = interval;
+			//key value
+			var keyValue = {};
+			keyValue.p = Ext.getCmp('contentType').getValue();
+			keyValue.s = Ext.getCmp('contentResource').getValue();
+			var cc = Ext.getCmp('contentType-config');
+			var autoCode = Ext.ComponentQuery.query('textfield[id^=auto-code-content]');
+			// var fieldContainers = cc.items.items;
+
+			Ext.Array.each(autoCode, function(obj, index, countriesItSelf) {
+				keyValue[obj.getName()] = obj.getValue();
+			});
+			params.keyValue = keyValue;
 			console.log(formValue);
 			if (form.isValid()) {
-				Ext.Ajax.request({
-					url : ROOT_URL + '/web/push/condition',
-					method : 'POST',
-					headers : {
-						'Content-Type' : 'application/json; charset=utf-8'
-					},
-					jsonData : params,
-					success : function(response) {
-						var text = response.responseText;
-						Ext.MessageBox.alert('提示', '创建成功', function() {
-							// var p = Ext.getCmp('menuManager');
-							// p.removeAll();
-							// p.initComponent();
-							win.close();
-						}, this);
-
-					},
-					failure : function(response) {
-						var text = response.responseText;
-						Ext.MessageBox.alert('提示', '创建失败-' + text, function() {
-							win.close();
-						}, this);
-					}
-				});
+				// Ext.Ajax.request({
+				// url : ROOT_URL + '/web/push/condition',
+				// method : 'POST',
+				// headers : {
+				// 'Content-Type' : 'application/json; charset=utf-8'
+				// },
+				// jsonData : params,
+				// success : function(response) {
+				// var text = response.responseText;
+				// Ext.MessageBox.alert('提示', '创建成功', function() {
+				// // var p = Ext.getCmp('menuManager');
+				// // p.removeAll();
+				// // p.initComponent();
+				// win.close();
+				// }, this);
+				//
+				// },
+				// failure : function(response) {
+				// var text = response.responseText;
+				// Ext.MessageBox.alert('提示', '创建失败-' + text, function() {
+				// win.close();
+				// }, this);
+				// }
+				// });
 			}
 		}
 	}]

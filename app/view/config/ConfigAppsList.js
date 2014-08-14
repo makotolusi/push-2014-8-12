@@ -9,7 +9,7 @@ Ext.define('Push.view.config.ConfigAppsList', {
 	exampleTitle : '应用配置列表',
 	requires : ['Push.util.Global'],
 	height : 700,
-	width : 1000,
+	width : 1300,
 	frame : true,
 	title : '应用配置列表',
 	disableSelection : true,
@@ -44,6 +44,17 @@ Ext.define('Push.view.config.ConfigAppsList', {
 					return dd;
 				},
 				width : 350,
+			},{
+				text : "标签类型",
+				dataIndex : 'tagTypes',
+				renderer : function(value) {
+					var dd = '';
+					Ext.Array.each(value, function(name, index, countriesItSelf) {
+						dd += name.name + ",";
+					});
+					return dd;
+				},
+				width : 300,
 			}, {
 				menuDisabled : true,
 				text : "操作",
@@ -91,12 +102,17 @@ Ext.define('Push.view.config.ConfigAppsList', {
 						Ext.Array.each(rec.get('contentTypes'), function(name, index, countriesItSelf) {
 							ca.push(name.id);
 						});
+						var tags = [];
+						Ext.Array.each(rec.get('tagTypes'), function(name, index, countriesItSelf) {
+							tags.push(name.id);
+						});
 						var win = Ext.create('Push.view.config.ConfigAppsForm', {
 							url : '/web/configapps/update',
 							caId : rec.get('id'),
 							caName : rec.get('name'),
 							caAppIds : rec.get('appIds'),
-							caContentTypes : ca
+							caContentTypes : ca,
+							caTagTypes : tags
 						});
 						win.show();
 					}

@@ -16,9 +16,9 @@ Ext.define('Push.Application', {
 	// TODO: add controllers here
 	],
 
-	stores : ['ContentTypes','Navigation','States', 'Roles', 'Operations','Apps'],
+	stores : ['ContentResources','ContentTypes','Navigation','States', 'Roles', 'Operations','Apps'],
 
-	model : ['State','MenuTree'],
+	model : ['ContentResource','State','MenuTree'],
 
 	init : function() {
 		// var session = this.session = new Ext.data.Session();
