@@ -5,7 +5,7 @@ Ext.define('Push.view.push.PushListTabs', {
 	extend : 'Ext.tab.Panel',
 	xtype : 'push-list-tabs',
 	controller : 'push-list-tab-view',
-
+	id : 'push-grid-tabs',
 	//<example>
 	requires : ['Push.view.push.PushListTabController'],
 	otherContent : [{
@@ -43,6 +43,12 @@ Ext.define('Push.view.push.PushListTabs', {
 		}, {
 			text : "内容类型",
 			dataIndex : 'contentType',
+			renderer : function(value) {
+				if (value == null)
+					return '无';
+				else
+					return value.name;
+			},
 			width : 100
 		}, {
 			text : "标题",
@@ -75,19 +81,19 @@ Ext.define('Push.view.push.PushListTabs', {
 				});
 				return dd;
 			},
-			flex : 1
+			width : 350
 		}, {
 			menuDisabled : true,
 			text : "操作",
 			sortable : false,
 			xtype : 'actioncolumn',
-			width : 80,
+			width : 100,
 			items : [{
 				iconCls : 'sell-col',
 				tooltip : '删除',
 				handler : function(grid, rowIndex, colIndex) {
 				}
-			},{
+			}, {
 				iconCls : 'application-go',
 				tooltip : '再次发送',
 				handler : function(grid, rowIndex, colIndex) {

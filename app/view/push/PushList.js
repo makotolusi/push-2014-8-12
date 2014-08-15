@@ -5,6 +5,7 @@ Ext.define('Push.view.push.PushList', {
 	extend : 'Ext.grid.Panel',
 
 	requires : ['Ext.data.*', 'Ext.grid.*', 'Ext.util.*', 'Ext.toolbar.Paging'],
+	id:'push-grid-xx',
 	xtype : 'push-list-grid',
 	//<example>
 	themes : {
@@ -27,6 +28,7 @@ Ext.define('Push.view.push.PushList', {
 	disableSelection : true,
 	loadMask : true,
 	initComponent : function() {
+		var me=this;
 		var states = Ext.create('Ext.data.Store', {
 			fields : ['abbr', 'name'],
 			data : [{
@@ -46,7 +48,7 @@ Ext.define('Push.view.push.PushList', {
 			store : states,
 			queryMode : 'local',
 			displayField : 'name',
-			valueField : 'abbr',
+			valueField : 'name',
 			renderTo : Ext.getBody()
 		});
 		// this.width = this.themeInfo.width;
@@ -83,7 +85,9 @@ Ext.define('Push.view.push.PushList', {
 				}, {
 					text : '创建推送',
 					handler : function(a) {
-						var win = Ext.create('Push.view.push.PushForm');
+						var win = Ext.create('Push.view.push.PushForm',{
+							pushType:me.pushType
+						});
 						win.setPosition(a.getX()-200, a.getY()-100);
 						win.show();
 					}

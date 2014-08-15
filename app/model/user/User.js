@@ -3,10 +3,5 @@
  */
 Ext.define('Push.model.user.User', {
 	extend : 'Push.model.Base',
-
-	fields : ['name', 'appName', 'appId', 'appKey', 'secretKey', 'appKey_ios', 'secretKey_ios'],
-	proxy : {
-		type : 'sessionstorage',
-		id : 'user-session'
-	}
+	fields : ['name', 'appName', 'appId', 'appKey', 'secretKey', 'appKey_ios', 'secretKey_ios']
 });

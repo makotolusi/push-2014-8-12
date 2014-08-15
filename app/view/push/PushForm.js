@@ -2,7 +2,7 @@ Ext.define('Push.view.push.PushForm', {
 	extend : 'Ext.window.Window',
 	xtype : 'push-from',
 	alise : 'widget.push-from',
-	requires : ['Ext.form.field.*', 'Push.util.Global', 'Push.store.ContentResources'],
+	requires : ['Ext.form.field.*', 'Push.util.Global', 'Push.store.ContentResources', 'Push.util.Global'],
 	id : 'push-form-win',
 	title : '创建推送',
 	frame : true,
@@ -13,10 +13,9 @@ Ext.define('Push.view.push.PushForm', {
 	},
 	initComponent : function() {
 		var me = this;
-		var session1 = Ext.create('Ext.data.Store', {
-			model : 'Push.model.user.User',
-		});
+		var session1 = Ext.getStore('Users');
 		session1.load();
+		console.log(session1.getData().getAt(0).get('appId'));
 		Ext.Ajax.request({
 			url : Push.util.Global.ROOT_URL + '/web/configapps/findByAppid',
 			method : 'POST',
@@ -46,6 +45,7 @@ Ext.define('Push.view.push.PushForm', {
 				var tagField = {
 					xtype : 'tagfield',
 					id : 'tag-tagField',
+					name : 'tag-tagField',
 					fieldLabel : '标签',
 					store : tagStore,
 					displayField : 'tagName',
@@ -63,7 +63,7 @@ Ext.define('Push.view.push.PushForm', {
 									scope : this
 								});
 							}
-						},
+						}
 					},
 				};
 				me.add({
@@ -126,19 +126,54 @@ Ext.define('Push.view.push.PushForm', {
 								name : 'pushType',
 								inputValue : 'TIMING',
 								handler : function(box, checked) {
-									var timmingField = Ext.getCmp('timmingField');
+									var timmingField = Ext.getCmp('timmingFieldContainer');
 									timmingField.el.animate({
 										opacity : checked ? 1 : 0.3
 									});
 								}
 							}]
 						}, {
-							xtype : 'datefield',
-							name : 'timmingField',
-							id : 'timmingField',
+							xtype : 'fieldcontainer',
+							fieldLabel : '定时时间',
+							id : 'timmingFieldContainer',
 							style : 'opacity:.3',
-							disabled : true,
-							fieldLabel : '定时时间'
+							layout : 'hbox',
+							combineErrors : false,
+							defaults : {
+								hideLabel : true
+							},
+							items : [{
+								xtype : 'displayfield',
+								value : '日期'
+							}, {
+								xtype : 'datefield',
+								name : 'timmingDateField',
+								id : 'timmingDateField',
+								fieldLabel : '日期',
+								format : 'Y-m-d',
+								minValue : new Date(),
+								padding : '0 0 0 10',
+								allowBlank : false,
+								disabled : true,
+								width : 100
+							}, {
+								xtype : 'displayfield',
+								padding : '0 0 0 10',
+								value : '时间'
+							}, {
+								xtype : 'timefield',
+								name : 'timmingField',
+								id : 'timmingField',
+								fieldLabel : '时间',
+								minValue : '8:00 AM',
+								maxValue : '10:00 PM',
+								increment : 30,
+								allowBlank : false,
+								disabled : true,
+								width : 100,
+								padding : '0 0 0 10',
+								anchor : '100%'
+							}]
 						}, {
 							xtype : 'fieldcontainer',
 							fieldLabel : '勿扰控制',
@@ -155,28 +190,34 @@ Ext.define('Push.view.push.PushForm', {
 								allowBlank : false
 							}, {
 								xtype : 'displayfield',
-								value : ':'
+								value : ':',
+								padding : '0 0 0 10'
 							}, {
 								name : 'sm',
 								xtype : 'numberfield',
+								padding : '0 0 0 10',
 								value : '0',
 								width : 50,
 								allowBlank : false
 							}, {
 								xtype : 'displayfield',
+								padding : '0 0 0 10',
 								value : '到'
 							}, {
 								name : 'eh',
 								xtype : 'numberfield',
+								padding : '0 0 0 10',
 								value : '22',
 								width : 50,
 								allowBlank : false
 							}, {
 								xtype : 'displayfield',
+								padding : '0 0 0 10',
 								value : ':'
 							}, {
 								name : 'em',
 								xtype : 'numberfield',
+								padding : '0 0 0 10',
 								value : '0',
 								width : 50,
 								allowBlank : false
@@ -236,7 +277,7 @@ Ext.define('Push.view.push.PushForm', {
 									// disabled : true
 								}]
 							}]
-						}/**, {
+						}/**,{
 						 xtype : 'fieldcontainer',
 						 layout : 'hbox',
 						 combineErrors : true,
@@ -247,14 +288,12 @@ Ext.define('Push.view.push.PushForm', {
 						 defaultType : 'textfield',
 						 margin : '0 0 5 0',
 						 items : [{
-						 fieldLabel : '内容ID',
-						 name : 'i',
-						 id:'auto-code-content-id',
-						 flex : 1,
-						 }, {
-						 fieldLabel : '内容标题',
-						 id:'auto-code-content-name',
-						 name : 't',
+						 fieldLabel : 'URL',
+						 vtype:'url',
+						 name : 'URL',
+						 id : 'auto-code-content-url',
+						 allowBlank:false,
+						 flex : 1
 						 }]
 						 }]
 						 }**/]
@@ -289,17 +328,40 @@ Ext.define('Push.view.push.PushForm', {
 											scope : this
 										});
 										// tagStore.on("load", function() {
-											// var num = tagStore.getCount();
-											// if (num > 10) {
-												// // var tagField = Ext.getCmp('tag-tagField');
-												// tagField.queryMode = 'local';
-												// console.log(tagField);
-											// }
+										// var num = tagStore.getCount();
+										// if (num > 10) {
+										// // var tagField = Ext.getCmp('tag-tagField');
+										// tagField.queryMode = 'local';
+										// console.log(tagField);
+										// }
 										// });
 									}
 								},
 							},
 							items : []
+						}, {
+							xtype : 'radiogroup',
+							fieldLabel : '标签关系',
+							id : 'tag-rel-radio',
+							cls : 'x-check-group-alt',
+							columns : [100, 100],
+							vertical : true,
+							listeners : {
+								'change' : {
+									fn : function(ths, newValue, oldValue, eOpts) {
+									}
+								},
+							},
+							items : [{
+								boxLabel : 'AND',
+								name : 'tagRelation',
+								inputValue : 'AND',
+								checked : true
+							}, {
+								boxLabel : 'OR',
+								name : 'tagRelation',
+								inputValue : 'OR'
+							}]
 						}, tagField]
 					}]
 				});
@@ -335,6 +397,10 @@ Ext.define('Push.view.push.PushForm', {
 	buttons : [{
 		text : '发送',
 		handler : function() {
+			var me = this;
+			var session1 = Ext.getStore('Users');
+			session1.load();
+			console.log(session1.getData().getAt(0).get('appId'));
 			var form = Ext.getCmp('push-form');
 			var win = Ext.getCmp('push-form-win');
 			var formValue = form.getValues();
@@ -343,6 +409,7 @@ Ext.define('Push.view.push.PushForm', {
 			params.content = formValue.content;
 			params.clientType = formValue.clientType;
 			params.pushType = formValue.pushType;
+			params.appId = session1.getData().getAt(0).get('appId');
 			var interval = {};
 			interval.sh = formValue.sh;
 			interval.sm = formValue.sm;
@@ -355,16 +422,39 @@ Ext.define('Push.view.push.PushForm', {
 			keyValue.s = Ext.getCmp('contentResource').getValue();
 			var cc = Ext.getCmp('contentType-config');
 			var autoCode = Ext.ComponentQuery.query('textfield[id^=auto-code-content]');
-			// var fieldContainers = cc.items.items;
-
-			Ext.Array.each(autoCode, function(obj, index, countriesItSelf) {
-				keyValue[obj.getName()] = obj.getValue();
+			var selectedTag = Ext.getCmp('tag-tagField').getValueRecords();
+			var tags = [];
+			Ext.Array.each(selectedTag, function(obj, index, countriesItSelf) {
+				console.log(obj.data.tagName);
+				tags.push({
+					tagId : obj.data.tagId,
+					tagName : obj.data.tagName
+				});
 			});
 			params.keyValue = keyValue;
-			console.log(formValue);
+			params.tags = tags;
+			params.tagRelation = Ext.getCmp('tag-rel-radio').getValue().tagRelation;
+			var exp = "0";
+			var timmingDateField = Ext.getCmp('timmingDateField').getRawValue();
+			if (timmingDateField != null && timmingField != null) {
+				var y = timmingDateField.split('-')[0];
+				var m = timmingDateField.split('-')[1];
+				var d = timmingDateField.split('-')[2];
+				console.log(timmingDateField);
+				var timmingField = Ext.getCmp('timmingField').getRawValue();
+				var h = timmingField.split(':')[0];
+				var M = timmingField.split(':')[1].split(' ')[0];
+				var apm = timmingField.split(':')[1].split(' ')[1];
+				if (apm == 'PM')
+					h = parseInt(h) + 12;
+				exp += " " + M + " " + h + " " + d + " " + m + " ? " + y;
+				params.cronExp = exp;
+			}
+			console.log(params);
+			console.log(form.isValid());
 			if (form.isValid()) {
 				// Ext.Ajax.request({
-				// url : ROOT_URL + '/web/push/condition',
+				// url : Push.util.Global.ROOT_URL + '/web/push/condition',
 				// method : 'POST',
 				// headers : {
 				// 'Content-Type' : 'application/json; charset=utf-8'
@@ -373,16 +463,15 @@ Ext.define('Push.view.push.PushForm', {
 				// success : function(response) {
 				// var text = response.responseText;
 				// Ext.MessageBox.alert('提示', '创建成功', function() {
-				// // var p = Ext.getCmp('menuManager');
-				// // p.removeAll();
-				// // p.initComponent();
+				// var p = Ext.getCmp('push-list-grid-' + me.up('window').pushType);
+				// p.getStore().reload();
 				// win.close();
 				// }, this);
 				//
 				// },
 				// failure : function(response) {
 				// var text = response.responseText;
-				// Ext.MessageBox.alert('提示', '创建失败-' + text, function() {
+				// Ext.MessageBox.alert('提示', '创建失败', function() {
 				// win.close();
 				// }, this);
 				// }

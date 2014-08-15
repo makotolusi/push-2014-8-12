@@ -16,7 +16,7 @@ Ext.define('Push.Application', {
 	// TODO: add controllers here
 	],
 
-	stores : ['ContentResources','ContentTypes','Navigation','States', 'Roles', 'Operations','Apps'],
+	stores : ['ContentResources','ContentTypes','Navigation','States', 'Roles', 'Operations','Apps','Users'],
 
 	model : ['ContentResource','State','MenuTree'],
 
