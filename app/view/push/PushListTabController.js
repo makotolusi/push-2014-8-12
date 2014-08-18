@@ -4,6 +4,8 @@ Ext.define('Push.view.push.PushListTabController', {
 
     onTabChange: function(tabs, newTab, oldTab) {
         Ext.suspendLayouts();
+        console.log(newTab.pushType);
+        Ext.getCmp('push-grid-tabs').pushType=newTab.pushType;
         // newTab.setTitle('Active Tab');
         // oldTab.setTitle('Inactive Tab');
         Ext.resumeLayouts(true);

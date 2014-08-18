@@ -26,6 +26,7 @@ Ext.define('Push.view.push.PushForm', {
 				appId : session1.getData().getAt(0).get('appId')
 			},
 			success : function(response) {
+				console.log(me.contentType);
 				var text = response.responseText;
 				var configApp = Ext.decode(text).app;
 				var contentTypes = Ext.create('Ext.data.Store', {
@@ -66,6 +67,25 @@ Ext.define('Push.view.push.PushForm', {
 						}
 					},
 				};
+				var clientType = {
+					xtype : 'checkboxgroup',
+					fieldLabel : '客户端',
+					cls : 'x-check-group-alt',
+					columns : [100, 100],
+					vertical : true,
+					items : [{
+						boxLabel : 'ANDROID',
+						name : 'clientType',
+						id : 'android-checkbox',
+						inputValue : 'ANDROID',
+						checked : true
+					}, {
+						boxLabel : 'IOS',
+						name : 'clientType',
+						id : 'ios-checkbox',
+						inputValue : 'IOS'
+					}]
+				};
 				me.add({
 					xtype : 'form',
 					id : 'push-form',
@@ -85,6 +105,7 @@ Ext.define('Push.view.push.PushForm', {
 							maxLength : 20,
 							allowBlank : false,
 							name : 'title',
+							value : me.ctTitle,
 							fieldLabel : '推送标题'
 						}, {
 							xtype : 'textareafield',
@@ -93,24 +114,9 @@ Ext.define('Push.view.push.PushForm', {
 							maxLength : 40,
 							allowBlank : false,
 							name : 'content',
+							value : me.ctContent,
 							fieldLabel : '推送内容'
-						}, {
-							xtype : 'checkboxgroup',
-							fieldLabel : '客户端',
-							cls : 'x-check-group-alt',
-							columns : [100, 100],
-							vertical : true,
-							items : [{
-								boxLabel : 'ANDROID',
-								name : 'clientType',
-								inputValue : 'ANDROID'
-							}, {
-								boxLabel : 'IOS',
-								name : 'clientType',
-								inputValue : 'IOS',
-								checked : true
-							}]
-						}, {
+						}, clientType, {
 							xtype : 'radiogroup',
 							fieldLabel : '推送方式',
 							cls : 'x-check-group-alt',
@@ -124,12 +130,17 @@ Ext.define('Push.view.push.PushForm', {
 							}, {
 								boxLabel : '定时发送',
 								name : 'pushType',
+								id : 'pushType',
 								inputValue : 'TIMING',
 								handler : function(box, checked) {
-									var timmingField = Ext.getCmp('timmingFieldContainer');
-									timmingField.el.animate({
+									var timmingFieldC = Ext.getCmp('timmingFieldContainer');
+									timmingFieldC.el.animate({
 										opacity : checked ? 1 : 0.3
 									});
+									var timmingDateField = Ext.getCmp('timmingDateField');
+									timmingDateField.disabled = false;
+									var timmingField = Ext.getCmp('timmingField');
+									timmingField.disabled = false;
 								}
 							}]
 						}, {
@@ -165,8 +176,8 @@ Ext.define('Push.view.push.PushForm', {
 								name : 'timmingField',
 								id : 'timmingField',
 								fieldLabel : '时间',
-								minValue : '8:00 AM',
-								maxValue : '10:00 PM',
+								// minValue : '8:00 AM',
+								// maxValue : '10:00 PM',
 								increment : 30,
 								allowBlank : false,
 								disabled : true,
@@ -185,8 +196,10 @@ Ext.define('Push.view.push.PushForm', {
 							items : [{
 								name : 'sh',
 								xtype : 'numberfield',
+								minValue : 0,
+								maxValue : 24,
 								width : 50,
-								value : '8',
+								value : me.interval == undefined ? '8' : me.interval.sh,
 								allowBlank : false
 							}, {
 								xtype : 'displayfield',
@@ -195,8 +208,10 @@ Ext.define('Push.view.push.PushForm', {
 							}, {
 								name : 'sm',
 								xtype : 'numberfield',
+								value : me.interval == undefined ? '0' : me.interval.sm,
 								padding : '0 0 0 10',
-								value : '0',
+								minValue : 0,
+								maxValue : 60,
 								width : 50,
 								allowBlank : false
 							}, {
@@ -206,8 +221,10 @@ Ext.define('Push.view.push.PushForm', {
 							}, {
 								name : 'eh',
 								xtype : 'numberfield',
+								value : me.interval == undefined ? '22' : me.interval.eh,
 								padding : '0 0 0 10',
-								value : '22',
+								minValue : 0,
+								maxValue : 24,
 								width : 50,
 								allowBlank : false
 							}, {
@@ -217,8 +234,10 @@ Ext.define('Push.view.push.PushForm', {
 							}, {
 								name : 'em',
 								xtype : 'numberfield',
+								value : me.interval == undefined ? '0' : me.interval.em,
 								padding : '0 0 0 10',
-								value : '0',
+								minValue : 0,
+								maxValue : 60,
 								width : 50,
 								allowBlank : false
 							}]
@@ -250,12 +269,35 @@ Ext.define('Push.view.push.PushForm', {
 									queryMode : 'local',
 									displayField : 'name',
 									valueField : 'index',
+									value : me.contentType == undefined ? '' : me.contentType.name,
 									listeners : {
 										scope : this,
 										'select' : function(combo, record, index) {
 											var contentResource = Ext.getCmp('contentResource');
+											var n = 1;
+											if (record[0].data.desc == 'NEWS' || record[0].data.desc == 'VIDEO') {
+												contentResource.disabled = false;
+												n = 1;
+												var store = contentResource.getStore();
+												if (record[0].data.desc == 'NEWS') {
+													store = Ext.create('Push.store.ContentResources');
+													store.filterBy(function(record) {
+														return record.get('index') == 4 || record.get('index') == 2 || record.get('index') == 5;
+													});
+												} else if (record[0].data.desc == 'VIDEO') {
+													store = Ext.create('Push.store.ContentResources');
+													store.filterBy(function(record) {
+														return record.get('index') == 1 || record.get('index') == 3 || record.get('index') == 6;
+													});
+												}
+												contentResource.store = store;
+												contentResource.bindStore(contentResource.store);
+											} else {
+												contentResource.disabled = true;
+												n = 0.3;
+											}
 											contentResource.el.animate({
-												opacity : record[0].data.desc == 'NEWS' ? 1 : 0.3
+												opacity : n
 											});
 											var cc = Ext.getCmp('contentType-config');
 											if (cc.items.length != 1)
@@ -273,8 +315,8 @@ Ext.define('Push.view.push.PushForm', {
 									displayField : 'name',
 									valueField : 'uri',
 									style : 'opacity:.3',
-									store : Ext.create('Push.store.ContentResources')
-									// disabled : true
+									// store : Ext.create('Push.store.ContentResources'),
+									disabled : true
 								}]
 							}]
 						}/**,{
@@ -377,6 +419,23 @@ Ext.define('Push.view.push.PushForm', {
 						inputValue : obj.index
 					});
 				});
+
+				if (me.ctClientType != undefined) {
+					Ext.getCmp('android-checkbox').setValue(false);
+					me.ctClientType == 'ANDROID' ? Ext.getCmp('android-checkbox').setValue(true) : Ext.getCmp('ios-checkbox').setValue(true);
+				}
+
+				if (me.url == '/web/push/sendAgain') {
+					if (Ext.getCmp('push-grid-tabs').pushType == 'IMMEDIATE') {
+						Ext.getCmp('pushType').disabled = true;
+					}
+					var contentType = Ext.getCmp('contentType');
+					var record = contentType.getStore().findRecord('index', me.contentType.index);
+					var cc = Ext.getCmp('contentType-config');
+					console.log(Ext.decode(record.data.code));
+					if (record.data.code!= '')
+						cc.add(Ext.decode(record.data.code));
+				}
 				/***=========================tag config===========================**/
 				// var store = Ext.create('Push.store.Tags');
 
@@ -429,6 +488,7 @@ Ext.define('Push.view.push.PushForm', {
 				tags.push({
 					tagId : obj.data.tagId,
 					tagName : obj.data.tagName
+					// code:obj.data.code
 				});
 			});
 			params.keyValue = keyValue;
@@ -436,46 +496,50 @@ Ext.define('Push.view.push.PushForm', {
 			params.tagRelation = Ext.getCmp('tag-rel-radio').getValue().tagRelation;
 			var exp = "0";
 			var timmingDateField = Ext.getCmp('timmingDateField').getRawValue();
-			if (timmingDateField != null && timmingField != null) {
+			var timmingField = Ext.getCmp('timmingField').getRawValue();
+			console.log(timmingDateField + "------- " + timmingDateField);
+			if (timmingDateField != '' && timmingField != '') {
 				var y = timmingDateField.split('-')[0];
 				var m = timmingDateField.split('-')[1];
 				var d = timmingDateField.split('-')[2];
-				console.log(timmingDateField);
-				var timmingField = Ext.getCmp('timmingField').getRawValue();
 				var h = timmingField.split(':')[0];
 				var M = timmingField.split(':')[1].split(' ')[0];
 				var apm = timmingField.split(':')[1].split(' ')[1];
 				if (apm == 'PM')
 					h = parseInt(h) + 12;
-				exp += " " + M + " " + h + " " + d + " " + m + " ? " + y;
+				exp += " " + M + " " + (h - 1) + " " + d + " " + m + " ? " + y;
 				params.cronExp = exp;
 			}
+
 			console.log(params);
 			console.log(form.isValid());
 			if (form.isValid()) {
-				// Ext.Ajax.request({
-				// url : Push.util.Global.ROOT_URL + '/web/push/condition',
-				// method : 'POST',
-				// headers : {
-				// 'Content-Type' : 'application/json; charset=utf-8'
-				// },
-				// jsonData : params,
-				// success : function(response) {
-				// var text = response.responseText;
-				// Ext.MessageBox.alert('提示', '创建成功', function() {
-				// var p = Ext.getCmp('push-list-grid-' + me.up('window').pushType);
-				// p.getStore().reload();
-				// win.close();
-				// }, this);
-				//
-				// },
-				// failure : function(response) {
-				// var text = response.responseText;
-				// Ext.MessageBox.alert('提示', '创建失败', function() {
-				// win.close();
-				// }, this);
-				// }
-				// });
+				Ext.Ajax.request({
+					url : Push.util.Global.ROOT_URL + '/web/push/condition',
+					method : 'POST',
+					headers : {
+						'Content-Type' : 'application/json; charset=utf-8'
+					},
+					jsonData : params,
+					success : function(response) {
+						var text = response.responseText;
+						Ext.MessageBox.alert('提示', '创建成功', function() {
+							var p = Ext.getCmp('push-list-grid-' + me.up('window').pushType);
+							p.getStore().reload();
+							win.close();
+						}, this);
+
+					},
+					failure : function(response) {
+						var text = response.responseText;
+						console.log(text);
+						Ext.MessageBox.alert('提示', '创建失败:' + text, function() {
+							var p = Ext.getCmp('push-list-grid-' + me.up('window').pushType);
+							p.getStore().reload();
+							win.close();
+						}, this);
+					}
+				});
 			}
 		}
 	}]

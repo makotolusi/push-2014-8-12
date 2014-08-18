@@ -14,6 +14,7 @@ Ext.define('Push.view.push.PushListTabs', {
 	}],
 	width : 1400,
 	height : 700,
+	pushType:'IMMEDIATE',
 	initComponent : function() {
 		var im = Ext.create('Push.view.push.PushList', {
 			pushType : 'IMMEDIATE',
@@ -35,12 +36,8 @@ Ext.define('Push.view.push.PushListTabs', {
 		scope : 'controller',
 		tabchange : 'onTabChange'
 	},
-	getColumn : function() {
-		return [{
-			text : "Id",
-			dataIndex : 'id',
-			hidden : true
-		}, {
+	getContentTypeCol:function(){
+		return  {
 			text : "内容类型",
 			dataIndex : 'contentType',
 			renderer : function(value) {
@@ -50,7 +47,14 @@ Ext.define('Push.view.push.PushListTabs', {
 					return value.name;
 			},
 			width : 100
-		}, {
+		};
+	},
+	getColumn : function() {
+		return [{
+			text : "Id",
+			dataIndex : 'id',
+			hidden : true
+		},this.getContentTypeCol(), {
 			text : "标题",
 			dataIndex : 'title',
 			width : 250,
@@ -82,35 +86,15 @@ Ext.define('Push.view.push.PushListTabs', {
 				return dd;
 			},
 			width : 350
-		}, {
-			menuDisabled : true,
-			text : "操作",
-			sortable : false,
-			xtype : 'actioncolumn',
-			width : 100,
-			items : [{
-				iconCls : 'sell-col',
-				tooltip : '删除',
-				handler : function(grid, rowIndex, colIndex) {
-				}
-			}, {
-				iconCls : 'application-go',
-				tooltip : '再次发送',
-				handler : function(grid, rowIndex, colIndex) {
-				}
-			}]
-		}];
+		},this.getOp()];
 	},
 	getColumn2 : function() {
+		var me = this;
 		return [{
 			text : "Id",
 			dataIndex : 'id',
 			hidden : true
-		}, {
-			text : "内容类型",
-			dataIndex : 'contentType',
-			width : 100
-		}, {
+		}, this.getContentTypeCol(), {
 			text : "标题",
 			dataIndex : 'title',
 			width : 200,
@@ -118,7 +102,7 @@ Ext.define('Push.view.push.PushListTabs', {
 		}, {
 			text : "内容",
 			dataIndex : 'content',
-			width : 200
+			width : 300
 		}, {
 			text : "客户端",
 			dataIndex : 'clientType',
@@ -126,10 +110,6 @@ Ext.define('Push.view.push.PushListTabs', {
 		}, {
 			text : "用户群",
 			dataIndex : 'userScope',
-			width : 100
-		}, {
-			text : "推送状态",
-			dataIndex : 'sendState',
 			width : 100
 		}, {
 			text : "标签",
@@ -141,43 +121,86 @@ Ext.define('Push.view.push.PushListTabs', {
 				});
 				return dd;
 			},
-			flex : 1
-		}, {
-			text : "开始时间",
-			dataIndex : 'startTime',
-			width : 100
-		}, {
+			width : 350
+		}
+		//,   {
+		// text : "开始时间",
+		// dataIndex : 'startTime',
+		// width : 100
+		// }
+		, {
 			text : "下次执行时间",
 			dataIndex : 'nextFireTime',
-			width : 100
-		}, {
-			text : "上次执行时间",
-			dataIndex : 'previousFireTime',
-			width : 100
-		}, {
+			width : 150
+		},me.getOp()
+		// {
+		// text : "上次执行时间",
+		// dataIndex : 'previousFireTime',
+		// width : 100
+		// },
+		];
+	},
+	getOp:function(){
+		var me=this;
+		return {
 			menuDisabled : true,
-			text : "删除",
+			text : "操作",
 			sortable : false,
 			xtype : 'actioncolumn',
-			width : 70,
+			width : 100,
 			items : [{
-				iconCls : 'application-go',
+				iconCls : 'sell-col',
 				tooltip : '删除',
 				handler : function(grid, rowIndex, colIndex) {
+					console.log(me.pushType);
+					Ext.MessageBox.confirm('提示', '确认删除吗?', function(btn, text) {
+						if (btn == 'yes') {
+							var rec = grid.getStore().getAt(rowIndex);
+							Ext.Ajax.request({
+								url : Push.util.Global.ROOT_URL + '/web/push/' + rec.get('id')+ '/' + me.pushType + '/delete',
+								method : 'POST',
+								headers : {
+									'Content-Type' : 'application/json; charset=utf-8'
+								},
+								jsonData : {
+								},
+								success : function(response) {
+									var text = response.responseText;
+									Ext.MessageBox.alert('提示', '删除成功', function() {
+										grid.getStore().reload();
+									}, this);
+
+								},
+								failure : function(response) {
+									var text = response.responseText;
+									Ext.MessageBox.alert('提示', '创建失败-' + text, function() {
+									}, this);
+								}
+							});
+						}
+					});
 				}
-			}]
-		}, {
-			menuDisabled : true,
-			text : "再次发送",
-			sortable : false,
-			xtype : 'actioncolumn',
-			width : 70,
-			items : [{
-				iconCls : 'application-go',
-				tooltip : '删除',
+			}, {
+				iconCls : 'grid-edit',
+				tooltip : '更新',
 				handler : function(grid, rowIndex, colIndex) {
+						var rec = grid.getStore().getAt(rowIndex);
+						var win = Ext.create('Push.view.push.PushForm', {
+							url : '/web/push/sendAgain',
+							ctId : rec.get('id'),
+							ctTitle : rec.get('title'),
+							ctContent : rec.get('content'),
+							ctClientType : rec.get('clientType'),
+							userScope : rec.get('userScope'),
+							tags : rec.get('tags'),
+							keyValue:rec.get('keyValue'),
+							interval:rec.get('interval'),
+							contentType:rec.get('contentType')
+						});
+						win.setPosition(600,50);
+						win.show();
 				}
 			}]
-		}];
+		};
 	}
 });
