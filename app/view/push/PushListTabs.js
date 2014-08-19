@@ -14,7 +14,7 @@ Ext.define('Push.view.push.PushListTabs', {
 	}],
 	width : 1400,
 	height : 700,
-	pushType:'IMMEDIATE',
+	pushType : 'IMMEDIATE',
 	initComponent : function() {
 		var im = Ext.create('Push.view.push.PushList', {
 			pushType : 'IMMEDIATE',
@@ -36,8 +36,8 @@ Ext.define('Push.view.push.PushListTabs', {
 		scope : 'controller',
 		tabchange : 'onTabChange'
 	},
-	getContentTypeCol:function(){
-		return  {
+	getContentTypeCol : function() {
+		return {
 			text : "内容类型",
 			dataIndex : 'contentType',
 			renderer : function(value) {
@@ -54,7 +54,7 @@ Ext.define('Push.view.push.PushListTabs', {
 			text : "Id",
 			dataIndex : 'id',
 			hidden : true
-		},this.getContentTypeCol(), {
+		}, this.getContentTypeCol(), {
 			text : "标题",
 			dataIndex : 'title',
 			width : 250,
@@ -86,7 +86,7 @@ Ext.define('Push.view.push.PushListTabs', {
 				return dd;
 			},
 			width : 350
-		},this.getOp()];
+		}, this.getOp()];
 	},
 	getColumn2 : function() {
 		var me = this;
@@ -102,7 +102,7 @@ Ext.define('Push.view.push.PushListTabs', {
 		}, {
 			text : "内容",
 			dataIndex : 'content',
-			width : 300
+			width : 200
 		}, {
 			text : "客户端",
 			dataIndex : 'clientType',
@@ -123,16 +123,20 @@ Ext.define('Push.view.push.PushListTabs', {
 			},
 			width : 350
 		}
-		//,   {
+		//,    {
 		// text : "开始时间",
 		// dataIndex : 'startTime',
 		// width : 100
 		// }
 		, {
+			text : "任务状态",
+			dataIndex : 'jobState',
+			width : 100
+		}, {
 			text : "下次执行时间",
 			dataIndex : 'nextFireTime',
 			width : 150
-		},me.getOp()
+		}, me.getOp()
 		// {
 		// text : "上次执行时间",
 		// dataIndex : 'previousFireTime',
@@ -140,8 +144,8 @@ Ext.define('Push.view.push.PushListTabs', {
 		// },
 		];
 	},
-	getOp:function(){
-		var me=this;
+	getOp : function() {
+		var me = this;
 		return {
 			menuDisabled : true,
 			text : "操作",
@@ -157,7 +161,7 @@ Ext.define('Push.view.push.PushListTabs', {
 						if (btn == 'yes') {
 							var rec = grid.getStore().getAt(rowIndex);
 							Ext.Ajax.request({
-								url : Push.util.Global.ROOT_URL + '/web/push/' + rec.get('id')+ '/' + me.pushType + '/delete',
+								url : Push.util.Global.ROOT_URL + '/web/push/' + rec.get('id') + '/' + me.pushType + '/delete',
 								method : 'POST',
 								headers : {
 									'Content-Type' : 'application/json; charset=utf-8'
@@ -184,21 +188,24 @@ Ext.define('Push.view.push.PushListTabs', {
 				iconCls : 'grid-edit',
 				tooltip : '更新',
 				handler : function(grid, rowIndex, colIndex) {
-						var rec = grid.getStore().getAt(rowIndex);
-						var win = Ext.create('Push.view.push.PushForm', {
-							url : '/web/push/sendAgain',
-							ctId : rec.get('id'),
-							ctTitle : rec.get('title'),
-							ctContent : rec.get('content'),
-							ctClientType : rec.get('clientType'),
-							userScope : rec.get('userScope'),
-							tags : rec.get('tags'),
-							keyValue:rec.get('keyValue'),
-							interval:rec.get('interval'),
-							contentType:rec.get('contentType')
-						});
-						win.setPosition(600,50);
-						win.show();
+					var rec = grid.getStore().getAt(rowIndex);
+					var win = Ext.create('Push.view.push.PushForm', {
+						url : '/web/push/sendAgain',
+						ctId : rec.get('id'),
+						ctTitle : rec.get('title'),
+						ctContent : rec.get('content'),
+						ctClientType : rec.get('clientType'),
+						userScope : rec.get('userScope'),
+						tags : rec.get('tags'),
+						keyValue : rec.get('keyValue'),
+						interval : rec.get('interval'),
+						contentType : rec.get('contentType'),
+						tags : rec.get('tags'),
+						nextFireTime : rec.get('nextFireTime'),
+						pushType : me.pushType
+					});
+					win.setPosition(600, 50);
+					win.show();
 				}
 			}]
 		};
