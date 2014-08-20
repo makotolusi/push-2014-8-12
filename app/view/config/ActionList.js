@@ -1,24 +1,23 @@
 /**
  * This example demonstrates using a paging display.
  */
-Ext.define('Push.view.config.ContentTypeList', {
+Ext.define('Push.view.config.ActionList', {
 	extend : 'Ext.grid.Panel',
 	requires : ['Ext.data.*', 'Ext.grid.*', 'Ext.util.*', 'Ext.toolbar.Paging'],
-	xtype : 'contenttype-list-grid',
-	id : 'contenttype-list-grid',
-	exampleTitle : '类型列表',
+	xtype : 'action-list-grid',
+	id : 'action-list-grid',
+	exampleTitle : '行为配置列表',
 	requires : ['Push.util.Global'],
 	height : 700,
-	width : 1500,
+	width : 1300,
 	frame : true,
-	title : '类型列表',
+	title : '行为配置列表',
 	disableSelection : true,
 	loadMask : true,
-
 	initComponent : function() {
 		var me = this;
 		// create the Data Store
-		var store = Ext.create('Push.store.ContentTypes');
+		var store = Ext.create('Push.store.Actions');
 		Ext.apply(this, {
 			store : store,
 			columnLines : true,
@@ -31,22 +30,6 @@ Ext.define('Push.view.config.ContentTypeList', {
 				dataIndex : 'name',
 				width : 150
 			}, {
-				text : "英文",
-				dataIndex : 'desc',
-				width : 200
-			}, {
-				text : "标签",
-				dataIndex : 'tag',
-				width : 150
-			}, {
-				text : "标识",
-				dataIndex : 'index',
-				width : 100
-			},  {
-				text : "分类",
-				dataIndex : 'cate',
-				width : 100
-			}, {
 				text : "行为",
 				dataIndex : 'action',
 				renderer : function(value) {
@@ -56,17 +39,24 @@ Ext.define('Push.view.config.ContentTypeList', {
 					});
 					return dd;
 				},
-				width : 300
+				width : 350,
 			}, {
-				text : "来源",
-				dataIndex : 'resourceUri',
-				width : 450
+				text : "标签",
+				dataIndex : 'tags',
+				renderer : function(value) {
+					var dd = '';
+					Ext.Array.each(value, function(name, index, countriesItSelf) {
+						dd += name.name + ",";
+					});
+					return dd;
+				},
+				width : 300,
 			}, {
 				menuDisabled : true,
 				text : "操作",
 				sortable : false,
 				xtype : 'actioncolumn',
-				width : 150,
+				width : 200,
 				items : [{
 					iconCls : 'sell-col',
 					tooltip : '删除',
@@ -75,7 +65,7 @@ Ext.define('Push.view.config.ContentTypeList', {
 							if (btn == 'yes') {
 								var rec = grid.getStore().getAt(rowIndex);
 								Ext.Ajax.request({
-									url : Push.util.Global.ROOT_URL + '/web/contentType/delete',
+									url : Push.util.Global.ROOT_URL + '/web/contentType/deleteAction',
 									method : 'POST',
 									headers : {
 										'Content-Type' : 'application/json; charset=utf-8'
@@ -97,28 +87,27 @@ Ext.define('Push.view.config.ContentTypeList', {
 									}
 								});
 							}
-						});
+						}, this);
 					}
 				}, {
 					iconCls : 'grid-edit',
 					tooltip : '更新',
 					handler : function(grid, rowIndex, colIndex) {
 						var rec = grid.getStore().getAt(rowIndex);
-							var sct = [];
+						var ca = [];
 						Ext.Array.each(rec.get('action'), function(name, index, countriesItSelf) {
-							sct.push(name.id);
+							ca.push(name.id);
 						});
-						var win = Ext.create('Push.view.config.ContentTypeForm', {
-							url : '/web/contentType/update',
-							ctId : rec.get('id'),
-							ctIndex : rec.get('index'),
-							ctDesc : rec.get('desc'),
-							ctName : rec.get('name'),
-							resourceUri : rec.get('resourceUri'),
-							ctTag : rec.get('tag'),
-							action : sct,
-							cate : rec.get('cate'),
-							code : rec.get('code')
+						var tags = [];
+						Ext.Array.each(rec.get('tags'), function(name, index, countriesItSelf) {
+							tags.push(name.id);
+						});
+						var win = Ext.create('Push.view.config.ActionForm', {
+							url : '/web/contentType/saveAction',
+							caId : rec.get('id'),
+							caName : rec.get('name'),
+							caContentTypes : ca,
+							caTagTypes : tags
 						});
 						win.show();
 					}
@@ -132,8 +121,8 @@ Ext.define('Push.view.config.ContentTypeList', {
 					text : '新增',
 					iconCls : 'add',
 					handler : function() {
-						var win = Ext.create('Push.view.config.ContentTypeForm', {
-							url : '/web/contentType/create'
+						var win = Ext.create('Push.view.config.ActionForm', {
+							url : '/web/contentType/saveAction'
 						});
 						win.show();
 					}
