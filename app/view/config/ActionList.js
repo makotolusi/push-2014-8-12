@@ -9,7 +9,7 @@ Ext.define('Push.view.config.ActionList', {
 	exampleTitle : '行为配置列表',
 	requires : ['Push.util.Global'],
 	height : 700,
-	width : 1300,
+	width : 1000,
 	frame : true,
 	title : '行为配置列表',
 	disableSelection : true,
@@ -50,7 +50,7 @@ Ext.define('Push.view.config.ActionList', {
 					});
 					return dd;
 				},
-				width : 300,
+				width : 350,
 			}, {
 				menuDisabled : true,
 				text : "操作",

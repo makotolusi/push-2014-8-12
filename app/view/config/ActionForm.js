@@ -57,9 +57,6 @@ Ext.define('Push.view.config.ActionForm', {
 			var win = Ext.getCmp('action-add-window');
 			var param = {};
 			var formValue = form.getValues();
-			if (win.url == '/web/configapps/update') {
-				param.id = win.caId;
-			}
 			var cts = Ext.getCmp('contentTypeTagField').getValue();
 			var tags = Ext.getCmp('tagTypeTagField').getValue();
 			var contentTypes = [];
@@ -77,6 +74,7 @@ Ext.define('Push.view.config.ActionForm', {
 			param.action = contentTypes;
 			param.tags = tagTypes;
 			param.name = formValue.name;
+			param.id = win.caId;
 			console.log(param);
 			if (form.isValid()) {
 				Ext.Ajax.request({

@@ -56,7 +56,7 @@ Ext.define('Push.view.config.ContentTypeList', {
 					});
 					return dd;
 				},
-				width : 300
+				width : 250
 			}, {
 				text : "来源",
 				dataIndex : 'resourceUri',
@@ -66,7 +66,7 @@ Ext.define('Push.view.config.ContentTypeList', {
 				text : "操作",
 				sortable : false,
 				xtype : 'actioncolumn',
-				width : 150,
+				width : 100,
 				items : [{
 					iconCls : 'sell-col',
 					tooltip : '删除',
