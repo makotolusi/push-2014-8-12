@@ -7,9 +7,7 @@ Ext.define('Push.view.user.RoleForm', {
 	bodyPadding : 10,
 	title : '新增角色',
 	closable : true,
-	// modal : true,
-	// cls : 'login',
-
+	requires : ['Push.util.Global'],
 	items : {
 		xtype : 'form',
 		reference : 'form',
@@ -30,7 +28,7 @@ Ext.define('Push.view.user.RoleForm', {
 			var formValue=form.getValues();
 			if (form.isValid()) {
 				Ext.Ajax.request({
-					url : uri + '/web/role/create',
+					url : Push.util.Global.ROOT_URL + '/web/role/create',
 					method : 'POST',
 					headers : {
 						'Content-Type' : 'application/json; charset=utf-8'

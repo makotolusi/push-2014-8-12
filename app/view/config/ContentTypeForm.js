@@ -15,18 +15,18 @@ Ext.define('Push.view.config.ContentTypeForm', {
 			}, {
 				"id" : "ACTION",
 				"name" : "行为"
-			}
-			]
+			}]
 		});
 
 		// Create the combo box, attached to the states data store
-		var cate=Ext.create('Ext.form.ComboBox', {
+		var cate = Ext.create('Ext.form.ComboBox', {
 			fieldLabel : '分类',
 			store : states,
-			name:'cate',
+			name : 'cate',
 			queryMode : 'local',
 			displayField : 'name',
 			value : me.cate,
+			allowBlank : false,
 			valueField : 'id'
 		});
 		Ext.applyIf(me, {
@@ -58,7 +58,7 @@ Ext.define('Push.view.config.ContentTypeForm', {
 					fieldLabel : '标签',
 					value : me.ctTag,
 					allowBlank : true
-				}, cate,{
+				},  cate, {
 					xtype : 'tagfield',
 					id : 'contentTypeTagField',
 					name : 'action',
@@ -105,7 +105,7 @@ Ext.define('Push.view.config.ContentTypeForm', {
 			params.name = formValue.name;
 			params.resourceUri = formValue.resourceUri;
 			params.tag = formValue.tag;
-			params.cate=formValue.cate;
+			params.cate = formValue.cate;
 			var sub = [];
 			var cts = Ext.getCmp('contentTypeTagField').getValue();
 			Ext.Array.each(cts, function(name, index, countriesItSelf) {

@@ -31,22 +31,6 @@ Ext.define('Push.view.config.ContentTypeList', {
 				dataIndex : 'name',
 				width : 150
 			}, {
-				text : "英文",
-				dataIndex : 'desc',
-				width : 200
-			}, {
-				text : "标签",
-				dataIndex : 'tag',
-				width : 150
-			}, {
-				text : "标识",
-				dataIndex : 'index',
-				width : 100
-			},  {
-				text : "分类",
-				dataIndex : 'cate',
-				width : 100
-			}, {
 				text : "行为",
 				dataIndex : 'action',
 				renderer : function(value) {
@@ -56,7 +40,23 @@ Ext.define('Push.view.config.ContentTypeList', {
 					});
 					return dd;
 				},
-				width : 250
+				width : 240
+			}, {
+				text : "标签",
+				dataIndex : 'tag',
+				width : 150
+			}, {
+				text : "英文",
+				dataIndex : 'desc',
+				width : 200
+			}, {
+				text : "标识",
+				dataIndex : 'index',
+				width : 100
+			}, {
+				text : "分类",
+				dataIndex : 'cate',
+				width : 100
 			}, {
 				text : "来源",
 				dataIndex : 'resourceUri',
@@ -104,7 +104,7 @@ Ext.define('Push.view.config.ContentTypeList', {
 					tooltip : '更新',
 					handler : function(grid, rowIndex, colIndex) {
 						var rec = grid.getStore().getAt(rowIndex);
-							var sct = [];
+						var sct = [];
 						Ext.Array.each(rec.get('action'), function(name, index, countriesItSelf) {
 							sct.push(name.id);
 						});

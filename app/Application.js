@@ -10,11 +10,11 @@ Ext.define('Push.Application', {
 	namespace : 'Push',
 	requires : ['Push.view.login.Login'],
 
-	views : ['config.Manual','config.ActionList','collection.JobLog','config.SystemConfigList','config.ConfigAppsList','config.ContentTypeList','config.ContentTypeForm','login.Login', 'form.FieldTypes', 'user.MenuManager', 'user.RoleManager', 'user.MenuToRole', 'collection.CollectionList', 'collection.CollectionTabs', 'collection.CollectionPanel', 'app.AppList', 'push.PushList', 'push.PushListTabs', 'navigation.Breadcrumb', 'Header', 'ContentPanel', 'navigation.Tree', 'grid.ArrayGrid', 'grid.Paging', 'grid.GridPlugins', 'form.HBoxLayoutForm', 'form.RadioGroupForm'],
+	views : ['user.ManagerList','config.Manual','config.ActionList','collection.JobLog','config.SystemConfigList','config.ConfigAppsList','config.ContentTypeList','config.ContentTypeForm','login.Login', 'form.FieldTypes', 'user.MenuManager', 'user.RoleManager', 'user.MenuToRole', 'collection.CollectionList', 'collection.CollectionTabs', 'collection.CollectionPanel', 'app.AppList', 'push.PushList', 'push.PushListTabs', 'navigation.Breadcrumb', 'Header', 'ContentPanel', 'navigation.Tree', 'grid.ArrayGrid', 'grid.Paging', 'grid.GridPlugins', 'form.HBoxLayoutForm', 'form.RadioGroupForm'],
 
 	controllers : ['Global'],
 
-	stores : ['Actions','ContentResources','ContentTypes','Navigation','States', 'Roles', 'Operations','Apps','Users'],
+	stores : ['Managers','Actions','ContentResources','ContentTypes','Navigation','States', 'Roles', 'Operations','Apps','Users'],
 
 	model : ['ContentResource','State','MenuTree'],
 

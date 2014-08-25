@@ -126,9 +126,10 @@ requires : ['Push.util.Global'],
 							},
 							success : function(response) {
 								var text = response.responseText;
-								Ext.MessageBox.alert('提示', '创建成功', function() {
-									this.onResetClick(me.roleId);
-								}, this);
+								this.onResetClick(me.roleId);
+								// Ext.MessageBox.alert('提示', '创建成功', function() {
+									// this.onResetClick(me.roleId);
+								// }, this);
 							},
 							failure : function(response) {
 								var text = response.responseText;

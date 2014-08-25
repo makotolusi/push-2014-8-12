@@ -9,7 +9,26 @@ Ext.define('Push.view.config.ActionForm', {
 	requires : ['Push.util.Global'],
 	initComponent : function() {
 		var me = this;
-		// appTag.setValue('40');
+		var states = Ext.create('Ext.data.Store', {
+			fields : ['id', 'name'],
+			data : [{
+				"id" : "SET_TAG",
+				"name" : "增加标签"
+			}, {
+				"id" : "DEL_TAG",
+				"name" : "删除标签"
+			}]
+		});
+		var cate = Ext.create('Ext.form.ComboBox', {
+			fieldLabel : '标签操作',
+			store : states,
+			name : 'operation',
+			queryMode : 'local',
+			displayField : 'name',
+			value : me.operation,
+			allowBlank : false,
+			valueField : 'id'
+		});
 		Ext.applyIf(me, {
 			items : [{
 				xtype : 'form',
@@ -22,6 +41,12 @@ Ext.define('Push.view.config.ActionForm', {
 					value : me.caName,
 					allowBlank : false
 				}, {
+					xtype : 'textfield',
+					name : 'condition',
+					fieldLabel : '表达式',
+					value : me.condition,
+					allowBlank : true
+				}, cate, {
 					xtype : 'tagfield',
 					id : 'contentTypeTagField',
 					name : 'contentTypes',
@@ -75,6 +100,8 @@ Ext.define('Push.view.config.ActionForm', {
 			param.tags = tagTypes;
 			param.name = formValue.name;
 			param.id = win.caId;
+			param.condition = formValue.condition;
+			param.operation = formValue.operation;
 			console.log(param);
 			if (form.isValid()) {
 				Ext.Ajax.request({

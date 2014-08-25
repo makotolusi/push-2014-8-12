@@ -9,7 +9,7 @@ Ext.define('Push.view.config.ActionList', {
 	exampleTitle : '行为配置列表',
 	requires : ['Push.util.Global'],
 	height : 700,
-	width : 1000,
+	width : 1400,
 	frame : true,
 	title : '行为配置列表',
 	disableSelection : true,
@@ -28,7 +28,15 @@ Ext.define('Push.view.config.ActionList', {
 			}, {
 				text : "名称",
 				dataIndex : 'name',
-				width : 150
+				width : 250
+			},{
+				text : "操作",
+				dataIndex : 'operation',
+				width : 100
+			}, {
+				text : "表达式",
+				dataIndex : 'condition',
+				width : 250
 			}, {
 				text : "行为",
 				dataIndex : 'action',
@@ -56,7 +64,7 @@ Ext.define('Push.view.config.ActionList', {
 				text : "操作",
 				sortable : false,
 				xtype : 'actioncolumn',
-				width : 200,
+				width : 100,
 				items : [{
 					iconCls : 'sell-col',
 					tooltip : '删除',
@@ -107,6 +115,8 @@ Ext.define('Push.view.config.ActionList', {
 							caId : rec.get('id'),
 							caName : rec.get('name'),
 							caContentTypes : ca,
+							condition : rec.get('condition'),
+							operation : rec.get('operation'),
 							caTagTypes : tags
 						});
 						win.show();
