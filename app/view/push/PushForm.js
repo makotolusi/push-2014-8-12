@@ -16,6 +16,7 @@ Ext.define('Push.view.push.PushForm', {
 		var session1 = Ext.getStore('Users');
 		session1.load();
 		console.log(session1.getData().getAt(0).get('appId'));
+			console.log(me.ctId);
 		Ext.Ajax.request({
 			url : Push.util.Global.ROOT_URL + '/web/configapps/findByAppid',
 			method : 'POST',
@@ -500,6 +501,7 @@ Ext.define('Push.view.push.PushForm', {
 			var win = Ext.getCmp('push-form-win');
 			var formValue = form.getValues();
 			var params = {};
+			params.id=win.ctId;
 			params.title = formValue.title;
 			params.content = formValue.content;
 			params.clientType = formValue.clientType;
@@ -535,7 +537,6 @@ Ext.define('Push.view.push.PushForm', {
 			var exp = "0";
 			var timmingDateField = Ext.getCmp('timmingDateField').getRawValue();
 			var timmingField = Ext.getCmp('timmingField').getRawValue();
-			// console.log(timmingDateField + "------- " + timmingDateField);
 			if (timmingDateField != '' && timmingField != '') {
 				var y = timmingDateField.split('-')[0];
 				var m = timmingDateField.split('-')[1];
@@ -545,7 +546,7 @@ Ext.define('Push.view.push.PushForm', {
 				var apm = timmingField.split(':')[1].split(' ')[1];
 				if (apm == 'PM')
 					h = parseInt(h) + 12;
-				exp += " " + M + " " + (h - 1) + " " + d + " " + m + " ? " + y;
+				exp += " " + M + " " + h + " " + d + " " + m + " ? " + y;
 				params.cronExp = exp;
 			}
 

@@ -89,7 +89,7 @@ Ext.define('Push.view.app.AppList', {
 				xtype : 'actioncolumn',
 				width : 80,
 				items : [{
-					iconCls : 'application-go',
+					iconCls : 'push_phone',
 					id : 'enter',
 					tooltip : '推送设置',
 					handler:'onEnter'
@@ -100,17 +100,9 @@ Ext.define('Push.view.app.AppList', {
 						// // var g = Push.getApplication().getController('Root');
 						// // g.redirectTo('push-list-tabs');
 					// }
-				}]
-			}, {
-				menuDisabled : true,
-				text : "数据采集",
-				sortable : false,
-				xtype : 'actioncolumn',
-				width : 80,
-				items : [{
-					iconCls : 'application-go',
-					id : 'enter',
-					tooltip : '推送设置',
+				},{
+					iconCls : 'push_data',
+					tooltip : '数据采集',
 					handler : 'onEnter'
 				}]
 			}],

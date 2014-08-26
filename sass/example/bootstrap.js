@@ -2325,23 +2325,36 @@ Ext.ClassManager.addNameAlternateMappings({
   "Push.model.App": [],
   "Push.model.Base": [],
   "Push.model.Company": [],
+  "Push.model.ConfigApp": [],
+  "Push.model.ContentResource": [],
+  "Push.model.ContentType": [],
+  "Push.model.Manager": [],
   "Push.model.MenuTree": [],
   "Push.model.Operation": [],
   "Push.model.Push": [],
   "Push.model.Role": [],
   "Push.model.State": [],
+  "Push.model.Tag": [],
   "Push.model.dd.Simple": [],
   "Push.model.grid.Financial": [],
   "Push.model.grid.ForumThread": [],
   "Push.model.user.User": [],
+  "Push.store.Actions": [],
   "Push.store.Apps": [],
   "Push.store.Companies": [],
+  "Push.store.ConfigApps": [],
+  "Push.store.ContentResources": [],
+  "Push.store.ContentTypes": [],
   "Push.store.ForumThreads": [],
+  "Push.store.Managers": [],
   "Push.store.Navigation": [],
   "Push.store.Operations": [],
   "Push.store.Pushs": [],
   "Push.store.Roles": [],
   "Push.store.States": [],
+  "Push.store.SystemConfigs": [],
+  "Push.store.Tags": [],
+  "Push.store.Users": [],
   "Push.util.Global": [],
   "Push.view.ContentPanel": [],
   "Push.view.Header": [],
@@ -2351,6 +2364,16 @@ Ext.ClassManager.addNameAlternateMappings({
   "Push.view.collection.CollectionPanel": [],
   "Push.view.collection.CollectionTabController": [],
   "Push.view.collection.CollectionTabs": [],
+  "Push.view.collection.JobLog": [],
+  "Push.view.config.ActionForm": [],
+  "Push.view.config.ActionList": [],
+  "Push.view.config.ConfigAppsForm": [],
+  "Push.view.config.ConfigAppsList": [],
+  "Push.view.config.ContentTypeForm": [],
+  "Push.view.config.ContentTypeList": [],
+  "Push.view.config.Manual": [],
+  "Push.view.config.SystemConfigForm": [],
+  "Push.view.config.SystemConfigList": [],
   "Push.view.form.FieldTypes": [],
   "Push.view.form.HBoxLayoutForm": [],
   "Push.view.form.RadioGroupForm": [],
@@ -2369,6 +2392,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Push.view.push.PushList": [],
   "Push.view.push.PushListTabController": [],
   "Push.view.push.PushListTabs": [],
+  "Push.view.user.ManagerForm": [],
+  "Push.view.user.ManagerList": [],
   "Push.view.user.MenuForm": [],
   "Push.view.user.MenuManager": [],
   "Push.view.user.MenuToRole": [],
@@ -3713,23 +3738,41 @@ Ext.ClassManager.addNameAliasMappings({
   "Push.model.App": [],
   "Push.model.Base": [],
   "Push.model.Company": [],
+  "Push.model.ConfigApp": [],
+  "Push.model.ContentResource": [],
+  "Push.model.ContentType": [],
+  "Push.model.Manager": [],
   "Push.model.MenuTree": [],
   "Push.model.Operation": [],
   "Push.model.Push": [],
   "Push.model.Role": [],
   "Push.model.State": [],
+  "Push.model.Tag": [],
   "Push.model.dd.Simple": [],
   "Push.model.grid.Financial": [],
   "Push.model.grid.ForumThread": [],
   "Push.model.user.User": [],
+  "Push.store.Actions": [
+    "store.Apps"
+  ],
   "Push.store.Apps": [
     "store.Apps"
   ],
   "Push.store.Companies": [
     "store.companies"
   ],
+  "Push.store.ConfigApps": [
+    "store.Apps"
+  ],
+  "Push.store.ContentResources": [],
+  "Push.store.ContentTypes": [
+    "store.Apps"
+  ],
   "Push.store.ForumThreads": [
     "store.forumthreads"
+  ],
+  "Push.store.Managers": [
+    "store.Apps"
   ],
   "Push.store.Navigation": [
     "store.navigation"
@@ -3746,6 +3789,11 @@ Ext.ClassManager.addNameAliasMappings({
   "Push.store.States": [
     "store.states"
   ],
+  "Push.store.SystemConfigs": [
+    "store.Apps"
+  ],
+  "Push.store.Tags": [],
+  "Push.store.Users": [],
   "Push.util.Global": [],
   "Push.view.ContentPanel": [
     "widget.contentPanel"
@@ -3770,6 +3818,28 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Push.view.collection.CollectionTabs": [
     "widget.collection-list-tabs"
+  ],
+  "Push.view.collection.JobLog": [
+    "widget.joblog-grid"
+  ],
+  "Push.view.config.ActionForm": [],
+  "Push.view.config.ActionList": [
+    "widget.action-list-grid"
+  ],
+  "Push.view.config.ConfigAppsForm": [],
+  "Push.view.config.ConfigAppsList": [
+    "widget.configapps-list-grid"
+  ],
+  "Push.view.config.ContentTypeForm": [],
+  "Push.view.config.ContentTypeList": [
+    "widget.contenttype-list-grid"
+  ],
+  "Push.view.config.Manual": [
+    "widget.config-manual"
+  ],
+  "Push.view.config.SystemConfigForm": [],
+  "Push.view.config.SystemConfigList": [
+    "widget.systemconfig-list-grid"
   ],
   "Push.view.form.FieldTypes": [
     "widget.form-fieldtypes"
@@ -3822,6 +3892,10 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Push.view.push.PushListTabs": [
     "widget.push-list-tabs"
+  ],
+  "Push.view.user.ManagerForm": [],
+  "Push.view.user.ManagerList": [
+    "widget.manager-list-grid"
   ],
   "Push.view.user.MenuForm": [],
   "Push.view.user.MenuManager": [

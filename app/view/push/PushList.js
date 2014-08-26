@@ -105,6 +105,7 @@ Ext.define('Push.view.push.PushList', {
 					}
 				}, '->', {
 					text : '创建推送',
+					iconCls : 'add',
 					margin : '0 30 0 0',
 					handler : function(a) {
 						var win = Ext.create('Push.view.push.PushForm', {

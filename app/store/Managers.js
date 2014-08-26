@@ -1,13 +1,13 @@
 Ext.define('Push.store.Managers', {
 	extend : 'Ext.data.Store',
 	alias : 'store.Apps',
-	model : 'Push.model.App',
+	model : 'Push.model.Manager',
 	autoLoad : true,
 	pageSize : 30,
 	requires : ['Push.util.Global'],
 	proxy : {
 		type : 'ajax',
-		url : Push.util.Global.ROOT_URL + '/web/app/list',
+		url : Push.util.Global.ROOT_URL + '/web/manager',
 		paramsAsJson : true,
 		actionMethods : {
 			read : "POST",

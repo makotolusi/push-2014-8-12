@@ -3,7 +3,7 @@ Ext.define('Push.view.user.RoleForm', {
 
 	requires : ['Ext.form.Panel', 'Ext.button.Button', 'Ext.form.field.Text', 'Ext.form.field.ComboBox'],
 
-	id:'role-add-window',
+	id : 'role-add-window',
 	bodyPadding : 10,
 	title : '新增角色',
 	closable : true,
@@ -25,7 +25,7 @@ Ext.define('Push.view.user.RoleForm', {
 		handler : function() {
 			var form = Ext.getCmp('role-add-form');
 			var win = Ext.getCmp('role-add-window');
-			var formValue=form.getValues();
+			var formValue = form.getValues();
 			if (form.isValid()) {
 				Ext.Ajax.request({
 					url : Push.util.Global.ROOT_URL + '/web/role/create',
@@ -37,16 +37,18 @@ Ext.define('Push.view.user.RoleForm', {
 					success : function(response) {
 						var text = response.responseText;
 						console.log(text);
-						Ext.MessageBox.alert('提示', '创建成功', function(){
-								win.close();
+						Ext.MessageBox.alert('提示', '创建成功', function() {
+							var p = Ext.getCmp('manager-list-grid');
+							p.getStore().reload();
+							win.close();
 						}, this);
-					
+
 					},
 					failure : function(response) {
 						var text = response.responseText;
 						console.log(text);
-						Ext.MessageBox.alert('提示', '创建失败-'+text,  function(){
-								win.close();
+						Ext.MessageBox.alert('提示', '创建失败-' + text, function() {
+							win.close();
 						}, this);
 					}
 				});
