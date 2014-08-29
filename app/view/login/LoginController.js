@@ -4,7 +4,7 @@
 Ext.define('Push.view.login.LoginController', {
 	extend : 'Ext.app.ViewController',
 	alias : 'controller.login',
-
+	requires : ['Push.util.Global'],
 	loginText : 'Logging in...',
 
 	constructor : function() {
@@ -28,31 +28,35 @@ Ext.define('Push.view.login.LoginController', {
 
 	doLogin : function() {
 		var form = this.lookupReference('form');
-		console.log('--------------log'+this.loginText);
-
 		if (form.isValid()) {
-			// Ext.getBody().mask(this.loginText);
-			// this.loginManager.login({
-				// data : form.getValues(),
-				// scope : this,
-				// success : 'onLoginSuccess',
-				// failure : 'onLoginFailure'
-			// });
-			this.onLoginSuccess({});
+			Ext.getBody().mask(this.loginText);
+			this.loginManager.login({
+				data : form.getValues(),
+				scope : this,
+				success : 'onLoginSuccess',
+				failure : 'onLoginFailure'
+			});
+
 		}
 	},
 
-	onLoginFailure : function() {
+	onLoginFailure : function(obj) {
 		// Do something
 		// Ext.getBody().unmask();
+		Ext.MessageBox.alert('提示', '登陆失败:' + Ext.decode(obj.responseText).msg, function() {
+		}, this);
 	},
 
 	onLoginSuccess : function(user) {
-		// Ext.getBody().unmask();
-		this.redirectTo('all');
+		Ext.getBody().unmask();
 		this.getView().close();
-		//
-		// var org = this.lookupReference('organization').getSelectedRecord();
-		// this.fireViewEvent('login', this.getView(), user, org, this.loginManager);
+		var session = Ext.getStore('Users');
+		var user_app = {
+			username :user.data.username
+		};
+		session.add(user_app);
+			session.sync();
+			console.log(session);
+		Ext.StoreMgr.get('navigation').load();
 	}
 });

@@ -1,13 +1,13 @@
-Ext.define('Push.store.Managers', {
+Ext.define('Push.store.ConfigCollections', {
 	extend : 'Ext.data.Store',
 	alias : 'store.Apps',
-	model : 'Push.model.Manager',
+	model : 'Push.model.ConfigCollection',
 	autoLoad : true,
 	pageSize : 30,
 	requires : ['Push.util.Global'],
 	proxy : {
 		type : 'ajax',
-		url : Push.util.Global.ROOT_URL + '/web/manager',
+		url : Push.util.Global.ROOT_URL + '/web/configcollections/list',
 		paramsAsJson : true,
 		actionMethods : {
 			read : "POST"
@@ -26,13 +26,5 @@ Ext.define('Push.store.Managers', {
 		writer : {
 			type : 'json'
 		}
-		// sends single sort as multi parameter
-		// simpleSortMode : true,
 	}
-	// remoteSort : true,
-
-	// sorters : [{
-	// property : 'lastpost',
-	// direction : 'DESC'
-	// }]
 });

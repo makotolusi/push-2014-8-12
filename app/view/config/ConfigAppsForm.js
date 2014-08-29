@@ -22,7 +22,6 @@ Ext.define('Push.view.config.ConfigAppsForm', {
 			queryMode : 'remote',
 			publishes : 'value'
 		};
-		// appTag.setValue('40');
 		Ext.applyIf(me, {
 			items : [{
 				xtype : 'form',
@@ -70,6 +69,18 @@ Ext.define('Push.view.config.ConfigAppsForm', {
 					filterPickList : true,
 					queryMode : 'remote',
 					value : me.caTag,
+				},{
+					xtype : 'tagfield',
+					id : 'collectionTag',
+					name : 'collection',
+					fieldLabel : '收集',
+					store : Ext.create('Push.store.ConfigCollections'),
+					displayField : 'chName',
+					valueField : 'id',
+					width : 300,
+					filterPickList : true,
+					queryMode : 'remote',
+					value : me.collectionTag,
 				}]
 			}]
 		});
@@ -87,9 +98,11 @@ Ext.define('Push.view.config.ConfigAppsForm', {
 			var cts = Ext.getCmp('contentTypeTagField').getValue();
 			var tags = Ext.getCmp('tagTypeTagField').getValue();
 			var doTag = Ext.getCmp('tag').getValue();
+			var collectionTag = Ext.getCmp('collectionTag').getValue();
 			var contentTypes = [];
 			var tagTypes = [];
 			var doTags = [];
+			var collectionTags = [];
 			Ext.Array.each(cts, function(name, index, countriesItSelf) {
 				var v = {};
 				v.id = name;
@@ -105,9 +118,15 @@ Ext.define('Push.view.config.ConfigAppsForm', {
 				v.id = name;
 				doTags.push(v);
 			});
+			Ext.Array.each(collectionTag, function(name, index, countriesItSelf) {
+				var v = {};
+				v.id = name;
+				collectionTags.push(v);
+			});
 			formValue.contentTypes = contentTypes;
 			formValue.tagTypes = tagTypes;
 			formValue.tag=doTags;
+			formValue.collection=collectionTags;
 			if (formValue.appIds == "")
 				formValue.appIds = [];
 			console.log(formValue);

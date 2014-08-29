@@ -10,7 +10,7 @@ Ext.define('Push.store.Pushs', {
 		url : Push.util.Global.ROOT_URL + '/web/push/list',
 		paramsAsJson : true,
 		actionMethods : {
-			read : "POST",
+			read : "POST"
 		},
 		extraParams : {
 		},

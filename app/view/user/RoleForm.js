@@ -38,7 +38,7 @@ Ext.define('Push.view.user.RoleForm', {
 						var text = response.responseText;
 						console.log(text);
 						Ext.MessageBox.alert('提示', '创建成功', function() {
-							var p = Ext.getCmp('manager-list-grid');
+							var p = Ext.getCmp('role-list');
 							p.getStore().reload();
 							win.close();
 						}, this);

@@ -10,27 +10,31 @@ Ext.define('Push.Application', {
 	namespace : 'Push',
 	requires : ['Push.view.login.Login'],
 
-	views : ['user.ManagerList','config.Manual','config.ActionList','collection.JobLog','config.SystemConfigList','config.ConfigAppsList','config.ContentTypeList','config.ContentTypeForm','login.Login', 'form.FieldTypes', 'user.MenuManager', 'user.RoleManager', 'user.MenuToRole', 'collection.CollectionList', 'collection.CollectionTabs', 'collection.CollectionPanel', 'app.AppList', 'push.PushList', 'push.PushListTabs', 'navigation.Breadcrumb', 'Header', 'ContentPanel', 'navigation.Tree', 'grid.ArrayGrid', 'grid.Paging', 'grid.GridPlugins', 'form.HBoxLayoutForm', 'form.RadioGroupForm'],
+	views : ['config.ConfigCollectionsList', 'collection.CollectionLog', 'user.ManagerList', 'config.Manual', 'config.ActionList', 'collection.JobLog', 'config.SystemConfigList', 'config.ConfigAppsList', 'config.ContentTypeList', 'config.ContentTypeForm', 'login.Login', 'form.FieldTypes', 'user.MenuManager', 'user.RoleManager', 'user.MenuToRole', 'app.AppList', 'push.PushList', 'push.PushListTabs', 'navigation.Breadcrumb', 'Header', 'ContentPanel', 'navigation.Tree', 'grid.ArrayGrid', 'grid.Paging', 'grid.GridPlugins', 'form.HBoxLayoutForm', 'form.RadioGroupForm'],
 
 	controllers : ['Global'],
 
-	stores : ['Managers','Actions','ContentResources','ContentTypes','Navigation','States', 'Roles', 'Operations','Apps','Users'],
+	stores : ['Managers', 'Actions', 'ContentResources', 'ContentTypes', 'Navigation', 'States', 'Roles', 'Operations', 'Apps', 'Users'],
 
-	model : ['ContentResource','State','MenuTree'],
+	model : ['ContentResource', 'State', 'MenuTree'],
 
 	init : function() {
-		// var session = this.session = new Ext.data.Session();
+
+		var session = Ext.getStore('Users');
+		session.load();
+		console.log('session.getData()');
+		console.log(session.getData().getAt(0));
+		if (session.getData().getAt(0) == undefined) {
+			var session = this.session = new Ext.data.Session();
+			console.log(this.session);
+			this.login = new Push.view.login.Login({
+				session : session,
+				autoShow : true
+			});
+		}
+
 		//
-		// this.login = new Push.view.login.Login({
-		// session: session,
-		// autoShow: true
-		// });
-		// if ('nocss3' in Ext.Object.fromQueryString(location.search)) {
-		// Ext.supports.CSS3BorderRadius = false;
-		// Ext.getBody().addCls('x-nbr x-nlg');
-		// }
-		//
-		var me = this, map = Ext.Object.fromQueryString(location.search), charts = ('charts' in map) && !/0|false|no/i.test(map.charts);
+		var me = this;
 
 		// var store = Ext.create('Push.store.Operations');
 		// var navItems = {};
@@ -53,10 +57,10 @@ Ext.define('Push.Application', {
 		// //display
 		//
 		// });
-		Ext.create('Push.store.Navigation', {
-			storeId : 'navigation'
-		});
-		me.setDefaultToken('all');
+		Ext.create('Push.store.Navigation');
+		this.redirectTo('app-list-grid');
+		// var viewport = Ext.create('Push.view.main.Main');
+		// Ext.Viewport.add(viewport);
 		//
 		// Ext.setGlyphFontFamily('Pictos');
 		// Ext.tip.QuickTipManager.init();

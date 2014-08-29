@@ -9,6 +9,7 @@ Ext.define('Push.view.app.AppList', {
 	controller : 'app-list-view',
 	//<example>
 	exampleTitle : '应用列表',
+	
 	themes : {
 		classic : {
 			width : 1500,
@@ -27,7 +28,7 @@ Ext.define('Push.view.app.AppList', {
 	width : 1850,
 	frame : true,
 	title : '应用列表',
-	disableSelection : true,
+	// disableSelection : true,
 	loadMask : true,
 
 	initComponent : function() {
@@ -74,13 +75,11 @@ Ext.define('Push.view.app.AppList', {
 				text : "AppKey_ios",
 				dataIndex : 'appKey_ios',
 				flex : 1,
-				// renderer: this.renderLast,
 				sortable : true
 			}, {
 				text : "SecretKey_ios",
 				dataIndex : 'secretKey_ios',
 				flex : 1,
-				// renderer: this.renderLast,
 				sortable : true
 			}, {
 				menuDisabled : true,
@@ -93,17 +92,10 @@ Ext.define('Push.view.app.AppList', {
 					id : 'enter',
 					tooltip : '推送设置',
 					handler:'onEnter'
-					// handler : function(grid, rowIndex, colIndex) {
-						// var rec = grid.getStore().getAt(rowIndex);
-						// console.log("Edit " + rec.get('name'));
-						    // Ext.container.Viewport.add(Ext.create('Push.view.push.PushListTabs'));
-						// // var g = Push.getApplication().getController('Root');
-						// // g.redirectTo('push-list-tabs');
-					// }
 				},{
 					iconCls : 'push_data',
 					tooltip : '数据采集',
-					handler : 'onEnter'
+					handler : 'toCollectionLog'
 				}]
 			}],
 			// inline buttons
@@ -133,23 +125,9 @@ Ext.define('Push.view.app.AppList', {
 			// paging bar on the bottom
 			bbar : Ext.create('Ext.PagingToolbar', {
 				store : store,
-				// displayInfo: false,
-				// displayMsg: 'Displaying topics {0} - {1} of {2}',
-				// emptyMsg: "No topics to display",
-				items : ['-'
-				// , {
-				// text: pluginExpanded ? 'Hide Preview' : 'Show Preview',
-				// pressed: pluginExpanded,
-				// enableToggle: true,
-				// toggleHandler: function(btn, pressed) {
-				// var preview = Ext.getCmp('gv').getPlugin('preview');
-				// preview.toggleExpanded(pressed);
-				// btn.setText(pressed ? 'Hide Preview' : 'Show Preview');
-				// }
-				// }
-				]
+				items : ['-']
 			})
 		});
 		this.callParent();
-	},
+	}
 });

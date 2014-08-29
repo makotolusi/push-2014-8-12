@@ -16,7 +16,7 @@ Ext.define('Push.store.ForumThreads', {
             totalProperty: 'totalCount'
         },
         // sends single sort as multi parameter
-        simpleSortMode: true,
+        simpleSortMode: true
     },
     sorters: [{
         property: 'lastpost',

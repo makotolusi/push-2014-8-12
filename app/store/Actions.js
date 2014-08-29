@@ -10,7 +10,7 @@ Ext.define('Push.store.Actions', {
 		url : Push.util.Global.ROOT_URL + '/web/contentType/listAction',
 		paramsAsJson : true,
 		actionMethods : {
-			read : "POST",
+			read : "POST"
 		},
 		extraParams : {
 		},

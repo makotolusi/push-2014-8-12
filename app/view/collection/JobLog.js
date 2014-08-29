@@ -19,12 +19,6 @@ Ext.define('Push.view.collection.JobLog', {
 	},
 
 	width : 1000,
-
-	lastNames : ['Jones', 'Smith', 'Lee', 'Wilson', 'Black', 'Williams', 'Lewis', 'Johnson', 'Foot', 'Little', 'Vee', 'Train', 'Hot', 'Mutt'],
-	firstNames : ['Fred', 'Julie', 'Bill', 'Ted', 'Jack', 'John', 'Mark', 'Mike', 'Chris', 'Bob', 'Travis', 'Kelly', 'Sara'],
-	cities : ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Philadelphia', 'Phoenix', 'San Antonio', 'San Diego', 'Dallas', 'San Jose'],
-	departments : ['Development', 'QA', 'Marketing', 'Accounting', 'Sales'],
-
 	initComponent : function() {
 		Ext.apply(this, {
 			items : [{

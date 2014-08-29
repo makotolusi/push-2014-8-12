@@ -11,7 +11,7 @@ Ext.define('Push.store.SystemConfigs', {
 		url : Push.util.Global.ROOT_URL + '/web/systemconfig/list',
 		paramsAsJson : true,
 		actionMethods : {
-			read : "POST",
+			read : "POST"
 		},
 		extraParams : {
 		},

@@ -52,7 +52,7 @@ Ext.define('Push.view.user.RoleManager', {
 				}]
 			}, {
 				xtype : 'gridpanel',
-				itemId : 'grid4',
+				id : 'role-list',
 				scroll : false,
 				store : store,
 				columns : [{

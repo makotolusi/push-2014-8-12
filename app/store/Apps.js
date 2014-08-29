@@ -10,7 +10,7 @@ Ext.define('Push.store.Apps', {
 		url : Push.util.Global.ROOT_URL + '/web/app/list',
 		paramsAsJson : true,
 		actionMethods : {
-			read : "POST",
+			read : "POST"
 		},
 		extraParams : {
 		},
@@ -20,7 +20,7 @@ Ext.define('Push.store.Apps', {
 		},
 		reader : {
 			type : 'json',
-			rootProperty:'page.content',
+			rootProperty : 'page.content',
 			totalProperty : 'page.rowCount'
 		},
 		writer : {

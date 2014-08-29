@@ -3,5 +3,5 @@
  */
 Ext.define('Push.model.user.User', {
 	extend : 'Push.model.Base',
-	fields : ['name', 'appName', 'appId', 'appKey', 'secretKey', 'appKey_ios', 'secretKey_ios']
+	fields : ['username','password','name', 'appName', 'appId', 'appKey', 'secretKey', 'appKey_ios', 'secretKey_ios']
 });

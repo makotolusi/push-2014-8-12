@@ -1,20 +1,18 @@
-Ext.define('Push.store.ContentTypes', {
+Ext.define('Push.store.Collections', {
 	extend : 'Ext.data.Store',
-	alias : 'store.Apps',
-	model : 'Push.model.ContentType',
-	autoLoad : true,
-	pageSize : 30,
+	autoLoad : false,
+	model : 'Push.model.Collection',
 	requires : ['Push.util.Global'],
-	storeId : 'contentTypes',
+	idProperty : 'collecions',
 	proxy : {
 		type : 'ajax',
-		url : Push.util.Global.ROOT_URL + '/web/contentType/list',
-		paramsAsJson : true,
 		actionMethods : {
-			read : "POST"
+			create : "POST",
+			read : "POST",
+			update : "POST",
+			destroy : "POST"
 		},
-		extraParams : {
-		},
+		paramsAsJson : true,
 		headers : {
 			'Content-Type' : 'application/json; charset=utf-8',
 			'Accept' : 'application/json'
@@ -24,8 +22,6 @@ Ext.define('Push.store.ContentTypes', {
 			rootProperty : 'page.content',
 			totalProperty : 'page.rowCount'
 		},
-		writer : {
-			type : 'json'
-		}
+		url : Push.util.Global.ROOT_URL + '/web/collection/listClientLogCollection'
 	}
 });

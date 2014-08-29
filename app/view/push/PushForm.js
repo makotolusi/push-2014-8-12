@@ -16,7 +16,6 @@ Ext.define('Push.view.push.PushForm', {
 		var session1 = Ext.getStore('Users');
 		session1.load();
 		console.log(session1.getData().getAt(0).get('appId'));
-			console.log(me.ctId);
 		Ext.Ajax.request({
 			url : Push.util.Global.ROOT_URL + '/web/configapps/findByAppid',
 			method : 'POST',

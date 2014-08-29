@@ -10,7 +10,7 @@ Ext.define('Push.store.ConfigApps', {
 		url : Push.util.Global.ROOT_URL + '/web/configapps/list',
 		paramsAsJson : true,
 		actionMethods : {
-			read : "POST",
+			read : "POST"
 		},
 		extraParams : {
 		},

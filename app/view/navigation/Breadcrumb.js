@@ -20,7 +20,7 @@ Ext.define('Push.view.navigation.Breadcrumb', {
 			reference : 'toolbar',
 			selection : this.getSelection(),
 			flex : 1,
-			store : Ext.StoreMgr.get('navigation')
+			store : Ext.create('Push.store.Navigation')
 		}];
 		this.callParent();
 		//

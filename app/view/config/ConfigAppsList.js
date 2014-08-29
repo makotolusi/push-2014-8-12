@@ -32,7 +32,7 @@ Ext.define('Push.view.config.ConfigAppsList', {
 			}, {
 				text : "所有应用",
 				dataIndex : 'appIds',
-				width : 300,
+				width : 250,
 			}, {
 				text : "内容类型",
 				dataIndex : 'contentTypes',
@@ -43,7 +43,7 @@ Ext.define('Push.view.config.ConfigAppsList', {
 					});
 					return dd;
 				},
-				width : 350,
+				width : 250,
 			},{
 				text : "标签类型",
 				dataIndex : 'tagTypes',
@@ -54,7 +54,7 @@ Ext.define('Push.view.config.ConfigAppsList', {
 					});
 					return dd;
 				},
-				width : 300,
+				width : 250,
 			},{
 				text : "打标签",
 				dataIndex : 'tag',
@@ -65,7 +65,18 @@ Ext.define('Push.view.config.ConfigAppsList', {
 					});
 					return dd;
 				},
-				width : 300,
+				width : 250,
+			},{
+				text : "收集",
+				dataIndex : 'collection',
+				renderer : function(value) {
+					var dd = '';
+					Ext.Array.each(value, function(name, index, countriesItSelf) {
+						dd += name.name + ",";
+					});
+					return dd;
+				},
+				width : 250,
 			}, {
 				menuDisabled : true,
 				text : "操作",
@@ -121,6 +132,10 @@ Ext.define('Push.view.config.ConfigAppsList', {
 						Ext.Array.each(rec.get('tag'), function(name, index, countriesItSelf) {
 							tt.push(name.id);
 						});
+						var collectionTags = [];
+						Ext.Array.each(rec.get('collection'), function(name, index, countriesItSelf) {
+							collectionTags.push(name.id);
+						});
 						var win = Ext.create('Push.view.config.ConfigAppsForm', {
 							url : '/web/configapps/update',
 							caId : rec.get('id'),
@@ -128,6 +143,7 @@ Ext.define('Push.view.config.ConfigAppsList', {
 							caAppIds : rec.get('appIds'),
 							caContentTypes : ca,
 							caTag : tt,
+							collectionTag:collectionTags,
 							caTagTypes : tags
 						});
 						win.show();

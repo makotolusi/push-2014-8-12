@@ -2,21 +2,7 @@ Ext.define('Push.controller.Global', {
 	extend : 'Ext.app.Controller',
 	requires : ['Push.view.*', 'Ext.window.*'],
 
-	stores : [
-	// 'Thumbnails',
-	'Navigation'
-	// 'Restaurants',
-	// 'Files',
-	// 'States',
-	// 'BigData',
-	// "USD2EUR",
-	// 'Widgets',
-	// 'Posts',
-	// 'GeoData',
-	// 'StandardCharts',
-	// 'Pie',
-	// 'StockPrice'
-	],
+	stores : ['Navigation'],
 
 	config : {
 		control : {
@@ -59,6 +45,7 @@ Ext.define('Push.controller.Global', {
 	},
 
 	beforeHandleRoute : function(id, action) {
+		console.log("=============id" + id);
 		var me = this, node = Ext.StoreMgr.get('navigation').getNodeById(id), navigationTree = me.getNavigationTree(), navigationBreadcrumb = me.getNavigationBreadcrumb();
 		if (node) {
 			//resume action
@@ -93,19 +80,6 @@ Ext.define('Push.controller.Global', {
 			Ext.resumeLayouts(true);
 
 		} else {
-			// thumbnailsStore = me.getThumbnailsStore();
-			// thumbnailsStore.removeAll();
-			// thumbnailsStore.add(node.childNodes);
-			// if (!thumbnails.ownerCt) {
-			// contentPanel.removeAll(true);
-			// }
-			// contentPanel.body.removeCls('kitchensink-example');
-			// contentPanel.add(thumbnails);
-			// codePreview.removeAll();
-			// codePreview.add({
-			// html: node.get('description') || ''
-			// });
-			// codePreview.tabBar.hide();
 			this.updateTitle(node);
 			Ext.resumeLayouts(true);
 		}

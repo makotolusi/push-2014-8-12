@@ -11,6 +11,7 @@ Ext.define('Push.view.main.MainController', {
 	alias : 'controller.main',
 
 	applyState : function(state) {
+		console.log(state);
 		if (state.hasTreeNav) {
 			this.getView().add({
 				region : 'west',

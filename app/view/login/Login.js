@@ -1,7 +1,7 @@
 Ext.define('Push.view.login.Login', {
 	extend : 'Ext.window.Window',
 
-	requires : ['Push.view.login.LoginController', 'Push.view.login.LoginModel', 'Ext.form.Panel', 'Ext.button.Button', 'Ext.form.field.Text', 'Ext.form.field.ComboBox'],
+	requires : ['Push.view.login.LoginController', 'Push.view.login.LoginModel', 'Ext.form.Panel', 'Ext.button.Button', 'Ext.form.field.Text', 'Ext.form.field.ComboBox','Push.store.Managers'],
 
 	viewModel : 'login',
 
@@ -18,8 +18,7 @@ Ext.define('Push.view.login.Login', {
 		items : [{
 			xtype : 'textfield',
 			name : 'username',
-			bind : '{username}',
-			fieldLabel : 'Username',
+			fieldLabel : '用户名',
 			allowBlank : false,
 			enableKeyEvents : true,
 			listeners : {
@@ -29,34 +28,12 @@ Ext.define('Push.view.login.Login', {
 			xtype : 'textfield',
 			name : 'password',
 			inputType : 'password',
-			fieldLabel : 'Password',
+			fieldLabel : '密码',
 			allowBlank : false,
 			enableKeyEvents : true,
 			cls : 'password',
 			listeners : {
 				specialKey : 'onSpecialKey'
-			}
-		}, {
-			xtype : 'displayfield',
-			hideEmptyLabel : false,
-			value : 'Enter any non-blank password',
-			cls : 'hint'
-		}, {
-			xtype : 'combobox',
-			name : 'organization',
-			fieldLabel : 'Organization',
-			reference : 'organization',
-			queryMode : 'local',
-			editable : false,
-			forceSelection : true,
-			displayField : 'name',
-			valueField : 'id',
-			bind : {
-				store : '{organizations}',
-				value : {
-					twoWay : false,
-					bindTo : '{defaultOrg}'
-				}
 			}
 		}]
 	},

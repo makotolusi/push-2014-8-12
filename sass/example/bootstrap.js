@@ -2324,8 +2324,10 @@ Ext.ClassManager.addNameAlternateMappings({
   "Push.controller.Root": [],
   "Push.model.App": [],
   "Push.model.Base": [],
+  "Push.model.Collection": [],
   "Push.model.Company": [],
   "Push.model.ConfigApp": [],
+  "Push.model.ConfigCollection": [],
   "Push.model.ContentResource": [],
   "Push.model.ContentType": [],
   "Push.model.Manager": [],
@@ -2341,8 +2343,10 @@ Ext.ClassManager.addNameAlternateMappings({
   "Push.model.user.User": [],
   "Push.store.Actions": [],
   "Push.store.Apps": [],
+  "Push.store.Collections": [],
   "Push.store.Companies": [],
   "Push.store.ConfigApps": [],
+  "Push.store.ConfigCollections": [],
   "Push.store.ContentResources": [],
   "Push.store.ContentTypes": [],
   "Push.store.ForumThreads": [],
@@ -2360,15 +2364,14 @@ Ext.ClassManager.addNameAlternateMappings({
   "Push.view.Header": [],
   "Push.view.app.AppList": [],
   "Push.view.app.AppListController": [],
-  "Push.view.collection.CollectionList": [],
-  "Push.view.collection.CollectionPanel": [],
-  "Push.view.collection.CollectionTabController": [],
-  "Push.view.collection.CollectionTabs": [],
+  "Push.view.collection.CollectionLog": [],
   "Push.view.collection.JobLog": [],
   "Push.view.config.ActionForm": [],
   "Push.view.config.ActionList": [],
   "Push.view.config.ConfigAppsForm": [],
   "Push.view.config.ConfigAppsList": [],
+  "Push.view.config.ConfigCollectionsForm": [],
+  "Push.view.config.ConfigCollectionsList": [],
   "Push.view.config.ContentTypeForm": [],
   "Push.view.config.ContentTypeList": [],
   "Push.view.config.Manual": [],
@@ -3737,8 +3740,10 @@ Ext.ClassManager.addNameAliasMappings({
   "Push.controller.Root": [],
   "Push.model.App": [],
   "Push.model.Base": [],
+  "Push.model.Collection": [],
   "Push.model.Company": [],
   "Push.model.ConfigApp": [],
+  "Push.model.ConfigCollection": [],
   "Push.model.ContentResource": [],
   "Push.model.ContentType": [],
   "Push.model.Manager": [],
@@ -3758,10 +3763,14 @@ Ext.ClassManager.addNameAliasMappings({
   "Push.store.Apps": [
     "store.Apps"
   ],
+  "Push.store.Collections": [],
   "Push.store.Companies": [
     "store.companies"
   ],
   "Push.store.ConfigApps": [
+    "store.Apps"
+  ],
+  "Push.store.ConfigCollections": [
     "store.Apps"
   ],
   "Push.store.ContentResources": [],
@@ -3807,17 +3816,8 @@ Ext.ClassManager.addNameAliasMappings({
   "Push.view.app.AppListController": [
     "controller.app-list-view"
   ],
-  "Push.view.collection.CollectionList": [
-    "widget.collection-list-grid"
-  ],
-  "Push.view.collection.CollectionPanel": [
-    "widget.collection-panels"
-  ],
-  "Push.view.collection.CollectionTabController": [
-    "controller.collection-tab-view"
-  ],
-  "Push.view.collection.CollectionTabs": [
-    "widget.collection-list-tabs"
+  "Push.view.collection.CollectionLog": [
+    "widget.collection-grid"
   ],
   "Push.view.collection.JobLog": [
     "widget.joblog-grid"
@@ -3829,6 +3829,10 @@ Ext.ClassManager.addNameAliasMappings({
   "Push.view.config.ConfigAppsForm": [],
   "Push.view.config.ConfigAppsList": [
     "widget.configapps-list-grid"
+  ],
+  "Push.view.config.ConfigCollectionsForm": [],
+  "Push.view.config.ConfigCollectionsList": [
+    "widget.configcollections-list-grid"
   ],
   "Push.view.config.ContentTypeForm": [],
   "Push.view.config.ContentTypeList": [
