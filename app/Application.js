@@ -10,7 +10,7 @@ Ext.define('Push.Application', {
 	namespace : 'Push',
 	requires : ['Push.view.login.Login'],
 
-	views : ['config.ConfigCollectionsList', 'collection.CollectionLog', 'user.ManagerList', 'config.Manual', 'config.ActionList', 'collection.JobLog', 'config.SystemConfigList', 'config.ConfigAppsList', 'config.ContentTypeList', 'config.ContentTypeForm', 'login.Login', 'form.FieldTypes', 'user.MenuManager', 'user.RoleManager', 'user.MenuToRole', 'app.AppList', 'push.PushList', 'push.PushListTabs', 'navigation.Breadcrumb', 'Header', 'ContentPanel', 'navigation.Tree', 'grid.ArrayGrid', 'grid.Paging', 'grid.GridPlugins', 'form.HBoxLayoutForm', 'form.RadioGroupForm'],
+	views : ['Logout', 'config.ConfigCollectionsList', 'collection.CollectionLog', 'user.ManagerList', 'config.Manual', 'config.ActionList', 'collection.JobLog', 'config.SystemConfigList', 'config.ConfigAppsList', 'config.ContentTypeList', 'config.ContentTypeForm', 'login.Login', 'form.FieldTypes', 'user.MenuManager', 'user.RoleManager', 'user.MenuToRole', 'app.AppList', 'push.PushList', 'push.PushListTabs', 'navigation.Breadcrumb', 'Header', 'ContentPanel', 'navigation.Tree', 'grid.ArrayGrid', 'grid.Paging', 'grid.GridPlugins', 'form.HBoxLayoutForm', 'form.RadioGroupForm'],
 
 	controllers : ['Global'],
 
@@ -19,51 +19,36 @@ Ext.define('Push.Application', {
 	model : ['ContentResource', 'State', 'MenuTree'],
 
 	init : function() {
-
-		var session = Ext.getStore('Users');
-		session.load();
-		console.log('session.getData()');
-		console.log(session.getData().getAt(0));
-		if (session.getData().getAt(0) == undefined) {
-			var session = this.session = new Ext.data.Session();
-			console.log(this.session);
-			this.login = new Push.view.login.Login({
-				session : session,
-				autoShow : true
-			});
-		}
-
-		//
 		var me = this;
-
-		// var store = Ext.create('Push.store.Operations');
-		// var navItems = {};
-		// store.on("load", function() {
-		// var num = store.getCount();
-		// for (var i = 0; i < num; i++) {
-		// var operations = store.getAt(i).get('operations');
-		// navItems.id = store.getAt(i).get('url');
-		// navItems.text = store.getAt(i).get('name');
-		// navItems.expanded = true;
-		// navItems.children = [];
-		// for (var j = 0; j < operations.length; j++) {
-		// var obj = {};
-		// obj.id = operations[j].url;
-		// obj.text = operations[j].name;
-		// obj.leaf = true;
-		// navItems.children.push(obj);
-		// }
-		// }
-		// //display
-		//
-		// });
-		Ext.create('Push.store.Navigation');
-		this.redirectTo('app-list-grid');
-		// var viewport = Ext.create('Push.view.main.Main');
-		// Ext.Viewport.add(viewport);
-		//
-		// Ext.setGlyphFontFamily('Pictos');
-		// Ext.tip.QuickTipManager.init();
-		// Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));
+		Ext.Ajax.request({
+			url : Push.util.Global.ROOT_URL + '/web/manager/isLogin',
+			method : 'POST',
+			headers : {
+				'Content-Type' : 'application/json; charset=utf-8'
+			},
+			jsonData : {
+			},
+			success : function(response) {
+				var text = response.responseText;
+				console.log('------'+text);
+				var r = Ext.decode(text);
+				if (!r.SUC) {
+					var session = this.session = new Ext.data.Session();
+					new Push.view.login.Login({
+						session : session,
+						autoShow : true
+					});
+					Ext.create('Push.store.Navigation');
+					me.redirectTo('app-list-grid');
+				}
+			},
+			failure : function(response) {
+				var text = response.responseText;
+				console.log(text);
+				Ext.MessageBox.alert('提示', '登录失败-' + text, function() {
+					win.close();
+				}, this);
+			}
+		});
 	}
 });

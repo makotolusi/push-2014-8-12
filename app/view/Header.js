@@ -1,34 +1,28 @@
 Ext.define('Push.view.Header', {
-    extend: 'Ext.Container',
-    xtype: 'appHeader',
-    alias: 'widget.appHeader',
-    id: 'app-header',
-    title: 'Ext JS Kitchen Sink',
-    height: 52,
-    layout: {
-        type: 'hbox',
-        align: 'middle'
-    },
+	extend : 'Ext.Container',
+	xtype : 'appHeader',
+	alias : 'widget.appHeader',
+	id : 'app-header',
+	height : 80,
+	layout : {
+		type : 'hbox',
+		align : 'middle'
+	},
 
-    initComponent: function() {
-        document.title = this.title;
+	initComponent : function() {
+		document.title = this.title;
+		this.items = [{
+			xtype : 'component',
+			id : 'app-header-logo'
+		}, ,{
+            xtype: 'component',
+            id: 'app-header-title',
+            html: this.title,
+            flex: 1
+        }, {
+			xtype : 'logout'
+		}];
 
-        // this.items = [{
-            // xtype: 'component',
-            // id: 'app-header-logo'
-        // },{
-            // xtype: 'component',
-            // id: 'app-header-title',
-            // html: this.title,
-            // flex: 1
-        // }];
-
-        // if (!Ext.getCmp('options-toolbar')) {
-            // this.items.push({
-                // xtype: 'themeSwitcher'
-            // });
-        // }
-
-        this.callParent();
-    }
+		this.callParent();
+	}
 });

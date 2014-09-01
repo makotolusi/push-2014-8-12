@@ -4,7 +4,7 @@ Ext.define('Push.view.login.Login', {
 	requires : ['Push.view.login.LoginController', 'Push.view.login.LoginModel', 'Ext.form.Panel', 'Ext.button.Button', 'Ext.form.field.Text', 'Ext.form.field.ComboBox','Push.store.Managers'],
 
 	viewModel : 'login',
-
+	id:'login',
 	controller : 'login',
 	bodyPadding : 10,
 	title : '推送平台-登陆',
@@ -39,7 +39,7 @@ Ext.define('Push.view.login.Login', {
 	},
 
 	buttons : [{
-		text : 'Login',
+		text : '登入',
 		listeners : {
 			click : 'onLoginClick'
 		}
