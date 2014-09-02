@@ -3,7 +3,7 @@ Ext.define('Push.controller.Global', {
 	requires : ['Push.view.*', 'Ext.window.*'],
 
 	stores : ['Navigation'],
-
+	alias : 'controller.global',
 	config : {
 		control : {
 			'navigation-tree' : {
@@ -45,63 +45,70 @@ Ext.define('Push.controller.Global', {
 	},
 
 	beforeHandleRoute : function(id, action) {
-		console.log("beforeHandleRoute====" + id);
-		if (id.indexOf('MenuTree') < 0) {
-			var me = this, node = Ext.StoreMgr.get('navigation').getNodeById(id), navigationTree = me.getNavigationTree(), navigationBreadcrumb = me.getNavigationBreadcrumb();
-			Ext.Ajax.request({
-				url : Push.util.Global.ROOT_URL + '/web/manager/isLogin',
-				method : 'POST',
-				headers : {
-					'Content-Type' : 'application/json; charset=utf-8'
-				},
-				jsonData : {
-				},
-				success : function(response) {
-					var text = response.responseText;
-					console.log(text);
-					var r = Ext.decode(text);
-					if (!r.SUC) {
-						if (!Ext.getCmp('login')) {
-							if ( id = 'app-list-grid') {
-								var session = this.session = new Ext.data.Session();
-								this.login = new Push.view.login.Login({
-									session : session,
-									autoShow : true
-								});
-							} else {
-								Ext.MessageBox.alert('提示', r.msg, function() {
-									var session = this.session = new Ext.data.Session();
-									this.login = new Push.view.login.Login({
-										session : session,
-										autoShow : true
-									});
-								}, this);
-							}
-						}
-					}
-					if (node) {
-						//resume action
-						action.resume();
-					} else {
-						me.showPanelContent(id);
-						Ext.resumeLayouts(true);
-					}
-				},
-				failure : function(response) {
-					var text = response.responseText;
-					console.log(text);
-					Ext.MessageBox.alert('提示', '失败-' + text, function() {
-						win.close();
-					}, this);
-				}
-			});
-		}
+		var me = this, node = Ext.StoreMgr.get('navigation').getNodeById(id);
+		// console.log('beforeHandleRoute--------'+id);
+		// console.log(node);
+		// var me = this;
+		action.resume();
+		// var me = this, store = Ext.StoreMgr.get('navigation'),node = store.getNodeById(id);
+		// console.log(store.getNodeById(id));
+		// console.log("beforeHandleRoute====" + id);
+		// if (node.isLeaf()) {
+		// Ext.Ajax.request({
+		// url : Push.util.Global.ROOT_URL + '/web/manager/isLogin',
+		// method : 'POST',
+		// headers : {
+		// 'Content-Type' : 'application/json; charset=utf-8'
+		// },
+		// jsonData : {
+		// },
+		// success : function(response) {
+		// var text = response.responseText;
+		// console.log(text);
+		// var r = Ext.decode(text);
+		// if (!r.SUC) {
+		// if (!Ext.getCmp('login')) {
+		// if ( id = 'app-list-grid') {
+		// var session = this.session = new Ext.data.Session();
+		// this.login = new Push.view.login.Login({
+		// session : session,
+		// autoShow : true
+		// });
+		// } else {
+		// Ext.MessageBox.alert('提示', r.msg, function() {
+		// var session = this.session = new Ext.data.Session();
+		// this.login = new Push.view.login.Login({
+		// session : session,
+		// autoShow : true
+		// });
+		// }, this);
+		// }
+		// }
+		// }
+		// if (node) {
+		// //resume action
+		// action.resume();
+		// } else {
+		// me.showPanelContent(id);
+		// Ext.resumeLayouts(true);
+		// }
+		// },
+		// failure : function(response) {
+		// var text = response.responseText;
+		// console.log(text);
+		// Ext.MessageBox.alert('提示', '失败-' + text, function() {
+		// win.close();
+		// }, this);
+		// }
+		// });
+		// }
 	},
 
 	handleRoute : function(id) {
-		var me = this, navigationTree = me.getNavigationTree(), navigationBreadcrumb = me.getNavigationBreadcrumb(), store = Ext.StoreMgr.get('navigation'), node = store.getNodeById(id), text = node.get('text');
-		console.log("handleRoute====" + id);
-		if (id.indexOf('MenuTree') < 0) {
+		console.log('handleRoute--------'+id);
+		var me = this, navigationTree = me.getNavigationTree(), navigationBreadcrumb = me.getNavigationBreadcrumb(), store = Ext.StoreMgr.get('navigation'), node = store.getNodeById(id);
+		console.log(node	);
+		if (node!=undefined&&node.isLeaf()) {
 			Ext.Ajax.request({
 				url : Push.util.Global.ROOT_URL + '/web/manager/handleRoute',
 				method : 'POST',
@@ -133,6 +140,11 @@ Ext.define('Push.controller.Global', {
 						}
 					} else {
 						Ext.MessageBox.alert('提示', r.msg, function() {
+							var session = this.session = new Ext.data.Session();
+							this.login = new Push.view.login.Login({
+								session : session,
+								autoShow : true
+							});
 
 						}, this);
 					}

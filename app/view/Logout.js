@@ -23,7 +23,7 @@ Ext.define('Push.view.Logout', {
 						},
 						success : function(response) {
 							// me.getController().redirectTo('app-list-grid');
-							   window.location.href='index.html';
+							   window.location.reload();
 						},
 						failure : function(response) {
 							var text = response.responseText;

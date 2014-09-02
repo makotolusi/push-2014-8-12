@@ -48,15 +48,13 @@ Ext.define('Push.view.login.LoginController', {
 	},
 
 	onLoginSuccess : function(user) {
+		var me=this;
 		Ext.getBody().unmask();
 		this.getView().close();
-		var session = Ext.getStore('Users');
-		var user_app = {
-			username :user.data.username
-		};
-		session.add(user_app);
-			session.sync();
-			console.log(session);
-		Ext.StoreMgr.get('navigation').load();
+		Ext.StoreMgr.get('navigation').reload();
+		Ext.StoreMgr.get('navigation').on("load", function() {
+			console.log('onLoginSuccess');
+			me.redirectTo('app-list-grid');
+		});
 	}
 });

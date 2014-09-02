@@ -1528,8 +1528,7 @@ Ext.Loader.addClassPathMappings({
   "ExtThemeNeptune": "../../ext/packages/ext-theme-neptune/overrides",
   "KitchenSink": "../../app",
   "Push": "../../app",
-  "Push.model.Push": "../../app/model/Push.js",
-  "Push.util.Global": "../../app/util/Global .js"
+  "Push.model.Push": "../../app/model/Push.js"
 });
 Ext.ClassManager.addNameAlternateMappings({
   "Ext.AbstractManager": [],

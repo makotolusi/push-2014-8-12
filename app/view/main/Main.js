@@ -11,6 +11,7 @@ Ext.define('Push.view.main.Main', {
 	xtype : 'app-main',
 
 	controller : 'main',
+	id: 'app-main',
 	viewModel : 'main',
 	stateful : true,
 	layout : 'border',

@@ -8,22 +8,25 @@ Ext.define('Push.view.navigation.Breadcrumb', {
 	},
 
 	initComponent : function() {
+				console.log('Breadcrumb');
+		var store=Ext.StoreMgr.get('navigation');
+		console.log(store.getRoot().childNodes[0]);
 		this.items = [{
 			xtype : 'tool',
 			type : 'down',
-			tooltip : 'Switch to Tree View',
+			tooltip : '切换',
 			listeners : {
 				click : 'showTreeNav'
 			}
 		}, {
 			xtype : 'breadcrumb',
 			reference : 'toolbar',
-			selection : this.getSelection(),
 			flex : 1,
-			store : Ext.create('Push.store.Navigation')
+			// Start with "Ext JS > dd > DragZone.js" selected
+            selection: store.getRoot().childNodes[0],
+			store :store 
 		}];
 		this.callParent();
-		//
 		this._breadcrumbBar = this.items.getAt(1);
 	},
 	updateSelection : function(node) {

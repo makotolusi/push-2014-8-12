@@ -1,7 +1,7 @@
 Ext.define('Push.view.navigation.Tree', {
 	extend : 'Ext.tree.Panel',
 	xtype : 'navigation-tree',
-	title : 'Examples',
+	title : '菜单栏',
 	rootVisible : false,
 	lines : false,
 	useArrows : true,
@@ -30,6 +30,8 @@ Ext.define('Push.view.navigation.Tree', {
     },
     
 	initComponent : function() {
+			console.log('Trees');
+			console.log(	Ext.StoreMgr.get('navigation').getNodeById('app-list-grid'));
 		var me = this;
 		me.columns = [{
 			xtype : 'treecolumn',

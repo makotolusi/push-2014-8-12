@@ -10,14 +10,13 @@ Ext.define('Push.view.Header', {
 	},
 
 	initComponent : function() {
-		document.title = this.title;
+		document.title = '移动端业务推送系统';
 		this.items = [{
 			xtype : 'component',
 			id : 'app-header-logo'
 		}, ,{
             xtype: 'component',
             id: 'app-header-title',
-            html: this.title,
             flex: 1
         }, {
 			xtype : 'logout'

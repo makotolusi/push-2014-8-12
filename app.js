@@ -7,6 +7,6 @@
 Ext.application({
     name: 'Push',
 
-    extend: 'Push.Application',
-    autoCreateViewport: 'Push.view.main.Main'
+    extend: 'Push.Application'
+    // autoCreateViewport: 'Push.view.main.Main'
 });
