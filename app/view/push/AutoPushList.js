@@ -3,14 +3,14 @@
  * By default, we start with no store or columns, we can define them later using the
  * reconfigure method.
  */
-Ext.define('Push.view.collection.JobLog', {
+Ext.define('Push.view.push.AutoPushList', {
 	extend : 'Ext.container.Container',
 
 	requires : ['Ext.grid.*', 'Ext.layout.container.HBox', 'Ext.layout.container.VBox', 'Push.util.Global'],
-	xtype : 'joblog-grid',
+	xtype : 'autopush-grid',
 
 	//<example>
-	exampleTitle : 'Job Log',
+	exampleTitle : '自动推送',
 	//</example>
 
 	layout : {
@@ -26,31 +26,48 @@ Ext.define('Push.view.collection.JobLog', {
 				layout : 'hbox',
 				defaultType : 'button',
 				items : [{
-					itemId : 'mapReduceLog',
-					text : 'MapReduce日志',
+					itemId : 'autoHistory',
+					text : '自动推送历史',
 					scope : this,
-					handler : this.onShowMapReduceLogClick
+					handler : this.onShowAutoHistoryClick
 				}, {
-					itemId : 'tagLog',
+					itemId : 'autoConfig',
 					margin : '0 0 0 10',
-					text : 'Tag结果日志',
+					text : '自动推送配置',
 					scope : this,
-					handler : this.onShowTagLogClick
+					handler : this.onAutoConfigClick
 				}]
 			}, {
 				margin : '10 0 0 0',
 				xtype : 'grid',
-				title:'MapReduce',
+				title : '自动推送历史',
 				flex : 1,
-				store : this.createMapReduceLogStore(),
+				store : this.createAutoHistoryStore(),
 				columns : [{
-					flex : 1,
-					text : 'MR名称',
-					dataIndex : 'statisicJobName'
+					text : "推送时间",
+					dataIndex : 'sendDate',
+					width : 150
 				}, {
-					text : '更新时间',
-					dataIndex : 'lastUpdateTime',
-					width : 140
+					text : "标题",
+					dataIndex : 'title',
+					width : 250,
+					sortable : false
+				}, {
+					text : "内容",
+					dataIndex : 'content',
+					width : 300
+				}, {
+					text : "客户端",
+					dataIndex : 'clientType',
+					width : 100
+				}, {
+					text : "用户群",
+					dataIndex : 'userScope',
+					width : 100
+				}, {
+					text : "推送状态",
+					dataIndex : 'sendState',
+					width : 100
 				}],
 				viewConfig : {
 					emptyText : 'Click a button to show a dataset',
@@ -61,11 +78,11 @@ Ext.define('Push.view.collection.JobLog', {
 		this.callParent();
 	},
 
-	onShowMapReduceLogClick : function() {
+	onShowAutoHistoryClick : function() {
 		var grid = this.down('grid');
 		Ext.suspendLayouts();
 		grid.setTitle('MapReduce');
-		grid.reconfigure(this.createMapReduceLogStore(), [{
+		grid.reconfigure(this.createAutoHistoryStore(), [{
 			flex : 1,
 			text : 'MR名称',
 			dataIndex : 'statisicJobName'
@@ -74,22 +91,22 @@ Ext.define('Push.view.collection.JobLog', {
 			dataIndex : 'lastUpdateTime',
 			width : 140
 		}]);
-		this.down('#mapReduceLog').disable();
-		this.down('#tagLog').enable();
+		this.down('#autoHistory').disable();
+		this.down('#autoConfig').enable();
 		Ext.resumeLayouts(true);
 	},
 
-	onShowTagLogClick : function() {
+	onAutoConfigClick : function() {
 		var grid = this.down('grid');
 		Ext.suspendLayouts();
 		grid.setTitle('Tag');
 		grid.reconfigure(this.createTagLogStore(), [{
 			text : '名称',
-				width : 250,
+			width : 250,
 			dataIndex : 'name'
 		}, {
 			text : '开始时间',
-				width : 250,
+			width : 250,
 			dataIndex : 'start'
 		}, {
 			text : '线程数',
@@ -103,15 +120,15 @@ Ext.define('Push.view.collection.JobLog', {
 			text : '大小',
 			dataIndex : 'size'
 		}]);
-		this.down('#tagLog').disable();
-		this.down('#mapReduceLog').enable();
+		this.down('#autoConfig').disable();
+		this.down('#autoHistory').enable();
 		Ext.resumeLayouts(true);
 	},
 
-	createMapReduceLogStore : function() {
+	createAutoHistoryStore : function() {
 		return new Ext.data.Store({
 			fields : ['id', 'statisicJobName', 'lastUpdateTime'],
-			autoLoad:true,
+			autoLoad : true,
 			proxy : {
 				type : 'ajax',
 				actionMethods : {
@@ -129,7 +146,7 @@ Ext.define('Push.view.collection.JobLog', {
 	createTagLogStore : function() {
 		return new Ext.data.Store({
 			fields : ['id', 'name', 'start', 'threadNum', 'state', 'size'],
-			autoLoad:true,
+			autoLoad : true,
 			proxy : {
 				type : 'ajax',
 				actionMethods : {
@@ -139,9 +156,8 @@ Ext.define('Push.view.collection.JobLog', {
 					type : 'json',
 					rootProperty : 'data'
 				},
-				url : Push.util.Global.ROOT_URL + '/web/manual/joblog/tagLog'
+				url : Push.util.Global.ROOT_URL + '/web/manual/joblog/autoConfig'
 			}
 		});
 	},
-
 });

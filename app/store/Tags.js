@@ -15,6 +15,6 @@ Ext.define('Push.store.Tags', {
 			type : 'json',
 			rootProperty : 'data'
 		},
-		url : Push.util.Global.ROOT_URL + '/web/tagmanager/get'
+		url : Push.util.Global.ROOT_URL + '/web/tagprovider/get'
 	}
 });

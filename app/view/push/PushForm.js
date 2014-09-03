@@ -13,9 +13,6 @@ Ext.define('Push.view.push.PushForm', {
 	},
 	initComponent : function() {
 		var me = this;
-		var session1 = Ext.getStore('Users');
-		session1.load();
-		console.log(session1.getData().getAt(0).get('appId'));
 		Ext.Ajax.request({
 			url : Push.util.Global.ROOT_URL + '/web/configapps/findByAppid',
 			method : 'POST',
@@ -23,7 +20,6 @@ Ext.define('Push.view.push.PushForm', {
 				'Content-Type' : 'application/json; charset=utf-8'
 			},
 			jsonData : {
-				appId : session1.getData().getAt(0).get('appId')
 			},
 			success : function(response) {
 				console.log(me.contentType);
@@ -353,6 +349,7 @@ Ext.define('Push.view.push.PushForm', {
 								'change' : {
 									fn : function(ths, newValue, oldValue, eOpts) {
 										index = newValue['tag-radio'];
+										console.log(index);
 										var tagField = Ext.getCmp('tag-tagField');
 										tagStore.load({
 											params : {

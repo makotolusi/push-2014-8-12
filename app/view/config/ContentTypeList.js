@@ -12,7 +12,7 @@ Ext.define('Push.view.config.ContentTypeList', {
 	width : 1500,
 	frame : true,
 	title : '类型列表',
-	disableSelection : true,
+	disableSelection : false,
 	loadMask : true,
 
 	initComponent : function() {
@@ -24,49 +24,11 @@ Ext.define('Push.view.config.ContentTypeList', {
 			columnLines : true,
 			// grid columns
 			columns : [{
-				dataIndex : 'id',
-				hidden : true
-			}, {
-				text : "名称",
-				dataIndex : 'name',
-				width : 150
-			}, {
-				text : "行为",
-				dataIndex : 'action',
-				renderer : function(value) {
-					var dd = '';
-					Ext.Array.each(value, function(name, index, countriesItSelf) {
-						dd += name.name + ",";
-					});
-					return dd;
-				},
-				width : 240
-			}, {
-				text : "标签",
-				dataIndex : 'tag',
-				width : 150
-			}, {
-				text : "英文",
-				dataIndex : 'desc',
-				width : 200
-			}, {
-				text : "标识",
-				dataIndex : 'index',
-				width : 100
-			}, {
-				text : "分类",
-				dataIndex : 'cate',
-				width : 100
-			}, {
-				text : "来源",
-				dataIndex : 'resourceUri',
-				width : 450
-			}, {
 				menuDisabled : true,
 				text : "操作",
 				sortable : false,
 				xtype : 'actioncolumn',
-				width : 100,
+				width : 80,
 				items : [{
 					iconCls : 'sell-col',
 					tooltip : '删除',
@@ -116,6 +78,7 @@ Ext.define('Push.view.config.ContentTypeList', {
 							ctName : rec.get('name'),
 							resourceUri : rec.get('resourceUri'),
 							ctTag : rec.get('tag'),
+							tagConstant : rec.get('tagConstant'),
 							action : sct,
 							cate : rec.get('cate'),
 							code : rec.get('code')
@@ -123,6 +86,45 @@ Ext.define('Push.view.config.ContentTypeList', {
 						win.show();
 					}
 				}]
+			},{
+				text : "名称",
+				dataIndex : 'name',
+				width : 150
+			}, {
+				text : "行为",
+				dataIndex : 'action',
+				renderer : function(value) {
+					var dd = '';
+					Ext.Array.each(value, function(name, index, countriesItSelf) {
+						dd += name.name + ",";
+					});
+					return dd;
+				},
+				width : 240
+			}, {
+				text : "标签变量",
+				dataIndex : 'tag',
+				width : 150
+			}, {
+				text : "标签常亮",
+				dataIndex : 'tagConstant',
+				width : 150
+			}, {
+				text : "英文",
+				dataIndex : 'desc',
+				width : 200
+			}, {
+				text : "标识",
+				dataIndex : 'index',
+				width : 100
+			}, {
+				text : "分类",
+				dataIndex : 'cate',
+				width : 100
+			}, {
+				text : "来源",
+				dataIndex : 'resourceUri',
+				width : 450
 			}],
 			// inline buttons
 

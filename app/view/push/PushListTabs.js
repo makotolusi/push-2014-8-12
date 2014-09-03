@@ -16,6 +16,7 @@ Ext.define('Push.view.push.PushListTabs', {
 	height : 700,
 	pushType : 'IMMEDIATE',
 	initComponent : function() {
+		console.log(this.appId);
 		var im = Ext.create('Push.view.push.PushList', {
 			pushType : 'IMMEDIATE',
 			title : '即时推送',
@@ -51,9 +52,19 @@ Ext.define('Push.view.push.PushListTabs', {
 	},
 	getColumn : function() {
 		return [{
-			text : "Id",
-			dataIndex : 'id',
-			hidden : true
+			text : "推送时间",
+			dataIndex : 'sendDate',
+			width : 150
+		}, {
+			text : "操作员",
+			dataIndex : 'manager',
+			renderer : function(value) {
+				if (value == null)
+					return "";
+				else
+					return value.username;
+			},
+			width : 100
 		}, this.getContentTypeCol(), {
 			text : "标题",
 			dataIndex : 'title',
@@ -123,7 +134,7 @@ Ext.define('Push.view.push.PushListTabs', {
 			},
 			width : 350
 		}
-		//,    {
+		//,      {
 		// text : "开始时间",
 		// dataIndex : 'startTime',
 		// width : 100

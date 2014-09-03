@@ -105,19 +105,25 @@ Ext.define('Push.controller.Global', {
 	},
 
 	handleRoute : function(id) {
-		console.log('handleRoute--------'+id);
+		console.log('handleRoute--------' + id);
+		var params = {};
+		if (id.indexOf('|appId|') >= 0) {
+			params.appId =id.split('|appId|')[1];
+			params.operation = id.split('|appId|')[0];
+		} else {
+			params.operation = id;
+		}
+			console.log(params);
 		var me = this, navigationTree = me.getNavigationTree(), navigationBreadcrumb = me.getNavigationBreadcrumb(), store = Ext.StoreMgr.get('navigation'), node = store.getNodeById(id);
-		console.log(node	);
-		if (node!=undefined&&node.isLeaf()) {
+		console.log(node);
+		if (node != undefined && node.isLeaf()) {
 			Ext.Ajax.request({
 				url : Push.util.Global.ROOT_URL + '/web/manager/handleRoute',
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/json; charset=utf-8'
 				},
-				jsonData : {
-					operation : id
-				},
+				jsonData : params,
 				success : function(response) {
 					var text = response.responseText;
 					console.log(text);

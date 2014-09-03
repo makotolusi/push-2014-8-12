@@ -58,7 +58,13 @@ Ext.define('Push.view.config.ContentTypeForm', {
 					fieldLabel : '标签',
 					value : me.ctTag,
 					allowBlank : true
-				},  cate, {
+				}, {
+					xtype : 'textfield',
+					name : 'tagConstant',
+					fieldLabel : '标签常亮',
+					value : me.tagConstant,
+					allowBlank : true
+				}, cate, {
 					xtype : 'tagfield',
 					id : 'contentTypeTagField',
 					name : 'action',
@@ -105,6 +111,7 @@ Ext.define('Push.view.config.ContentTypeForm', {
 			params.name = formValue.name;
 			params.resourceUri = formValue.resourceUri;
 			params.tag = formValue.tag;
+			params.tagConstant = formValue.tagConstant;
 			params.cate = formValue.cate;
 			var sub = [];
 			var cts = Ext.getCmp('contentTypeTagField').getValue();
