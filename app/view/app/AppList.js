@@ -10,22 +10,10 @@ Ext.define('Push.view.app.AppList', {
 	//<example>
 	exampleTitle : '应用列表',
 	
-	themes : {
-		classic : {
-			width : 1500,
-			percentChangeColumnWidth : 75,
-			lastUpdatedColumnWidth : 85
-		},
-		neptune : {
-			width : 1500,
-			percentChangeColumnWidth : 100,
-			lastUpdatedColumnWidth : 115
-		}
-	},
 	//</example>
 
-	height : 700,
-	width : 1850,
+	height : 600,
+	width : 1300,
 	frame : true,
 	title : '应用列表',
 	// disableSelection : true,
@@ -33,7 +21,6 @@ Ext.define('Push.view.app.AppList', {
 
 	initComponent : function() {
 		var me = this;
-		this.width = this.themeInfo.width;
 		var pluginExpanded = false;
 		// create the Data Store
 		var store = Ext.create('Push.store.Apps');

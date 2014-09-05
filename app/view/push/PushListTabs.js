@@ -207,7 +207,6 @@ Ext.define('Push.view.push.PushListTabs', {
 						ctContent : rec.get('content'),
 						ctClientType : rec.get('clientType'),
 						userScope : rec.get('userScope'),
-						tags : rec.get('tags'),
 						keyValue : rec.get('keyValue'),
 						interval : rec.get('interval'),
 						contentType : rec.get('contentType'),

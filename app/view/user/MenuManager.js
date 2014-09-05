@@ -40,7 +40,22 @@ Ext.define('Push.view.user.MenuManager', {
 
 	showMenu : function() {
 		var me = this;
-		var store = Ext.create('Push.store.Operations');
+		var store = Ext.create('Push.store.Operations', {
+			proxy : {
+				type : 'ajax',
+				actionMethods : {
+					create : "POST",
+					read : "POST",
+					update : "POST",
+					destroy : "POST"
+				},
+				reader : {
+					type : 'json',
+					rootProperty : 'children'
+				},
+				url : Push.util.Global.ROOT_URL + '/web/manageItem/listAll'
+			}
+		});
 		store.on("load", function() {
 			me.add({
 				xtype : 'toolbar',
@@ -133,7 +148,10 @@ Ext.define('Push.view.user.MenuManager', {
 										headers : {
 											'Content-Type' : 'application/json; charset=utf-8'
 										},
-										jsonData : {id:row.get('id'),manageItemId:this.up('toolbar').manageItemId},
+										jsonData : {
+											id : row.get('id'),
+											manageItemId : this.up('toolbar').manageItemId
+										},
 										success : function(response) {
 											var text = response.responseText;
 											Ext.MessageBox.alert('提示', '创建成功', function() {

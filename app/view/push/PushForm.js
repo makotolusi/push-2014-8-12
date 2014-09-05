@@ -22,7 +22,7 @@ Ext.define('Push.view.push.PushForm', {
 			jsonData : {
 			},
 			success : function(response) {
-				console.log(me.contentType);
+				console.log(me.tags);
 				var text = response.responseText;
 				var configApp = Ext.decode(text).app;
 				var contentTypes = Ext.create('Ext.data.Store', {
@@ -74,12 +74,176 @@ Ext.define('Push.view.push.PushForm', {
 						name : 'clientType',
 						id : 'android-checkbox',
 						inputValue : 'ANDROID',
-						checked : true
+						checked : me.ctClientType == 'ANDROID' || me.ctClientType == 'ALL' ? true : false,
 					}, {
 						boxLabel : 'IOS',
 						name : 'clientType',
 						id : 'ios-checkbox',
-						inputValue : 'IOS'
+						inputValue : 'IOS',
+						checked : me.ctClientType == 'IOS' || me.ctClientType == 'ALL' ? true : false,
+					}]
+				};
+				var pushType = {
+					xtype : 'radiogroup',
+					fieldLabel : '推送方式',
+					cls : 'x-check-group-alt',
+					columns : [100, 100],
+					vertical : true,
+					hidden : me.url == '/web/push/updateAutoConfig' ? true : false,
+					items : [{
+						boxLabel : '即刻发送',
+						name : 'pushType',
+						id : 'pushType-im',
+						checked : me.url == '/web/push/sendAgain' ? (me.pushType == 'IMMEDIATE' ? true : false) : true,
+						disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'IMMEDIATE' ? false : true) : false,
+						inputValue : 'IMMEDIATE'
+					}, {
+						boxLabel : '定时发送',
+						name : 'pushType',
+						checked : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? true : false) : false,
+						disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? false : true) : false,
+						id : 'pushType-tim',
+						inputValue : 'TIMING',
+						handler : function(box, checked) {
+							var timmingFieldC = Ext.getCmp('timmingFieldContainer');
+							timmingFieldC.el.animate({
+								opacity : checked ? 1 : 0.3
+							});
+							var timmingDateField = Ext.getCmp('timmingDateField');
+							timmingDateField.disabled = false;
+							var timmingField = Ext.getCmp('timmingField');
+							timmingField.disabled = false;
+						}
+					}]
+				};
+				var timing = {
+					xtype : 'fieldcontainer',
+					fieldLabel : '定时时间',
+					id : 'timmingFieldContainer',
+					style : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? 'opacity:1' : 'opacity:.3') : 'opacity:.3',
+					disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? false : true) : false,
+					layout : 'hbox',
+					hidden : me.url == '/web/push/updateAutoConfig' ? true : false,
+					combineErrors : false,
+					defaults : {
+						hideLabel : true
+					},
+					items : [{
+						xtype : 'displayfield',
+						value : '日期'
+					}, {
+						xtype : 'datefield',
+						name : 'timmingDateField',
+						id : 'timmingDateField',
+						fieldLabel : '日期',
+						format : 'Y-m-d',
+						disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? false : true) : true,
+						minValue : new Date(),
+						padding : '0 0 0 10',
+						allowBlank : false,
+						width : 100
+					}, {
+						xtype : 'displayfield',
+						padding : '0 0 0 10',
+						value : '时间'
+					}, {
+						xtype : 'timefield',
+						name : 'timmingField',
+						disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? false : true) : true,
+						id : 'timmingField',
+						fieldLabel : '时间',
+						// minValue : '8:00 AM',
+						// maxValue : '10:00 PM',
+						increment : 30,
+						allowBlank : false,
+						width : 100,
+						padding : '0 0 0 10',
+						anchor : '100%'
+					}]
+				};
+				var contentType = {
+					xtype : 'fieldset',
+					style : {
+						position : 'inherit'
+					},
+					id : 'contentType-config',
+					width : 620,
+					title : '推送内容',
+					layout : 'anchor',
+					hidden : me.url == '/web/push/updateAutoConfig' ? true : false,
+					items : [{
+						xtype : 'fieldcontainer',
+						layout : 'hbox',
+						combineErrors : true,
+						defaultType : 'textfield',
+						items : [{
+							xtype : 'container',
+							layout : 'hbox',
+							defaultType : 'combo',
+							margin : '0 0 5 0',
+							items : [{
+								fieldLabel : '推送类型',
+								id : 'contentType',
+								contentTypeFieldSet : true,
+								name : 'p',
+								store : contentTypes,
+								queryMode : 'local',
+								displayField : 'name',
+								valueField : 'index',
+								value : me.contentType == undefined ? '' : me.contentType.index,
+								listeners : {
+									scope : this,
+									'select' : function(combo, record, index) {
+										var contentResource = Ext.getCmp('contentResource');
+										var n = 1;
+										if (record[0].data.desc == 'NEWS' || record[0].data.desc == 'VIDEO') {
+											contentResource.disabled = false;
+											n = 1;
+											var store = contentResource.getStore();
+											if (record[0].data.desc == 'NEWS') {
+												store = Ext.create('Push.store.ContentResources');
+												store.filterBy(function(record) {
+													return record.get('index') == 4 || record.get('index') == 2 || record.get('index') == 5;
+												});
+											} else if (record[0].data.desc == 'VIDEO') {
+												store = Ext.create('Push.store.ContentResources');
+												store.filterBy(function(record) {
+													return record.get('index') == 1 || record.get('index') == 3 || record.get('index') == 6;
+												});
+											}
+											contentResource.store = store;
+											contentResource.bindStore(contentResource.store);
+										} else {
+											contentResource.disabled = true;
+											n = 0.3;
+										}
+										contentResource.el.animate({
+											opacity : n
+										});
+										var cc = Ext.getCmp('contentType-config');
+										var l = cc.items.length;
+										for (var i = 0; i < l - 1; i++) {
+											cc.remove(cc.items.last());
+										}
+										if (record[0].data.code != '')
+											cc.add(Ext.decode(record[0].data.code));
+									}
+								},
+								flex : 1
+							}, {
+								fieldLabel : '来源类型',
+								id : 'contentResource',
+								name : 's',
+								queryMode : 'local',
+								displayField : 'name',
+								contentTypeFieldSet : true,
+								valueField : 'uri',
+								value : me.contentType == undefined ? '' : me.contentType.uri,
+								style : me.keyValue == undefined ? 'opacity:.3' : (me.keyValue.p == '1' || me.keyValue.p == '3') ? 'opacity:1' : 'opacity:.3',
+								// store : Ext.create('Push.store.ContentResources'),
+								disabled : me.keyValue == undefined ? true : (me.keyValue.p == '1' || me.keyValue.p == '3') ? false : true
+							}]
+						}]
 					}]
 				};
 				me.add({
@@ -112,81 +276,7 @@ Ext.define('Push.view.push.PushForm', {
 							name : 'content',
 							value : me.ctContent,
 							fieldLabel : '推送内容'
-						}, clientType, {
-							xtype : 'radiogroup',
-							fieldLabel : '推送方式',
-							cls : 'x-check-group-alt',
-							columns : [100, 100],
-							vertical : true,
-							items : [{
-								boxLabel : '即刻发送',
-								name : 'pushType',
-								id : 'pushType-im',
-								checked : me.url == '/web/push/sendAgain' ? (me.pushType == 'IMMEDIATE' ? true : false) : true,
-								disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'IMMEDIATE' ? false : true) : false,
-								inputValue : 'IMMEDIATE'
-							}, {
-								boxLabel : '定时发送',
-								name : 'pushType',
-								checked : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? true : false) : false,
-								disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? false : true) : false,
-								id : 'pushType-tim',
-								inputValue : 'TIMING',
-								handler : function(box, checked) {
-									var timmingFieldC = Ext.getCmp('timmingFieldContainer');
-									timmingFieldC.el.animate({
-										opacity : checked ? 1 : 0.3
-									});
-									var timmingDateField = Ext.getCmp('timmingDateField');
-									timmingDateField.disabled = false;
-									var timmingField = Ext.getCmp('timmingField');
-									timmingField.disabled = false;
-								}
-							}]
-						}, {
-							xtype : 'fieldcontainer',
-							fieldLabel : '定时时间',
-							id : 'timmingFieldContainer',
-							style : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? 'opacity:1' : 'opacity:.3') : 'opacity:.3',
-							disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? false : true) : false,
-							layout : 'hbox',
-							combineErrors : false,
-							defaults : {
-								hideLabel : true
-							},
-							items : [{
-								xtype : 'displayfield',
-								value : '日期'
-							}, {
-								xtype : 'datefield',
-								name : 'timmingDateField',
-								id : 'timmingDateField',
-								fieldLabel : '日期',
-								format : 'Y-m-d',
-								disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? false : true) : true,
-								minValue : new Date(),
-								padding : '0 0 0 10',
-								allowBlank : false,
-								width : 100
-							}, {
-								xtype : 'displayfield',
-								padding : '0 0 0 10',
-								value : '时间'
-							}, {
-								xtype : 'timefield',
-								name : 'timmingField',
-								disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'TIMING' ? false : true) : true,
-								id : 'timmingField',
-								fieldLabel : '时间',
-								// minValue : '8:00 AM',
-								// maxValue : '10:00 PM',
-								increment : 30,
-								allowBlank : false,
-								width : 100,
-								padding : '0 0 0 10',
-								anchor : '100%'
-							}]
-						}, {
+						}, clientType, pushType, timing, {
 							xtype : 'fieldcontainer',
 							fieldLabel : '勿扰控制',
 							layout : 'hbox',
@@ -243,90 +333,7 @@ Ext.define('Push.view.push.PushForm', {
 								allowBlank : false
 							}]
 						}]
-					}, {
-						xtype : 'fieldset',
-						style : {
-							position : 'inherit'
-						},
-						id : 'contentType-config',
-						width : 620,
-						title : '推送内容',
-						layout : 'anchor',
-						items : [{
-							xtype : 'fieldcontainer',
-							layout : 'hbox',
-							combineErrors : true,
-							defaultType : 'textfield',
-							items : [{
-								xtype : 'container',
-								layout : 'hbox',
-								defaultType : 'combo',
-								margin : '0 0 5 0',
-								items : [{
-									fieldLabel : '推送类型',
-									id : 'contentType',
-									contentTypeFieldSet : true,
-									name : 'p',
-									store : contentTypes,
-									queryMode : 'local',
-									displayField : 'name',
-									valueField : 'index',
-									value : me.contentType == undefined ? '' : me.contentType.index,
-									listeners : {
-										scope : this,
-										'select' : function(combo, record, index) {
-											var contentResource = Ext.getCmp('contentResource');
-											var n = 1;
-											if (record[0].data.desc == 'NEWS' || record[0].data.desc == 'VIDEO') {
-												contentResource.disabled = false;
-												n = 1;
-												var store = contentResource.getStore();
-												if (record[0].data.desc == 'NEWS') {
-													store = Ext.create('Push.store.ContentResources');
-													store.filterBy(function(record) {
-														return record.get('index') == 4 || record.get('index') == 2 || record.get('index') == 5;
-													});
-												} else if (record[0].data.desc == 'VIDEO') {
-													store = Ext.create('Push.store.ContentResources');
-													store.filterBy(function(record) {
-														return record.get('index') == 1 || record.get('index') == 3 || record.get('index') == 6;
-													});
-												}
-												contentResource.store = store;
-												contentResource.bindStore(contentResource.store);
-											} else {
-												contentResource.disabled = true;
-												n = 0.3;
-											}
-											contentResource.el.animate({
-												opacity : n
-											});
-											var cc = Ext.getCmp('contentType-config');
-											var l = cc.items.length;
-											for (var i = 0; i < l - 1; i++) {
-												cc.remove(cc.items.last());
-											}
-											if (record[0].data.code != '')
-												cc.add(Ext.decode(record[0].data.code));
-										}
-									},
-									flex : 1
-								}, {
-									fieldLabel : '来源类型',
-									id : 'contentResource',
-									name : 's',
-									queryMode : 'local',
-									displayField : 'name',
-									contentTypeFieldSet : true,
-									valueField : 'uri',
-									value : me.contentType == undefined ? '' : me.contentType.uri,
-									style : me.keyValue == undefined ? 'opacity:.3' : (me.keyValue.p == '1' || me.keyValue.p == '3') ? 'opacity:1' : 'opacity:.3',
-									// store : Ext.create('Push.store.ContentResources'),
-									disabled : me.keyValue == undefined ? true : (me.keyValue.p == '1' || me.keyValue.p == '3') ? false : true
-								}]
-							}]
-						}]
-					}, {
+					}, contentType, {
 						xtype : 'fieldset',
 						title : '用户群',
 						style : {
@@ -408,59 +415,63 @@ Ext.define('Push.view.push.PushForm', {
 					});
 				});
 
-				if (me.ctClientType != undefined) {
-					Ext.getCmp('android-checkbox').setValue(false);
-					me.ctClientType == 'ANDROID' ? Ext.getCmp('android-checkbox').setValue(true) : Ext.getCmp('ios-checkbox').setValue(true);
+				if (me.ctClientType == undefined) {
+					Ext.getCmp('android-checkbox').setValue(true);
+					Ext.getCmp('ios-checkbox').setValue(true);
+					// me.ctClientType == 'ANDROID' ? Ext.getCmp('android-checkbox').setValue(true) : Ext.getCmp('ios-checkbox').setValue(true);
 				}
 				//================================update=====================================
-				if (me.url == '/web/push/sendAgain') {
+				if (me.url == '/web/push/sendAgain' || me.url == '/web/push/updateAutoConfig') {
 					if (me.pushType == 'TIMING') {
 						console.log(me.nextFireTime);
 						var date = me.nextFireTime.split(' ')[0];
 						var time = me.nextFireTime.split(' ')[1];
-						var m=parseInt(time.split(':')[0]);
-						var apm=m>12?'PM':'AM';
-						m=m>12?m-12:m;
-						var time=m+":"+time.split(':')[1]+" "+apm;
+						var m = parseInt(time.split(':')[0]);
+						var apm = m > 12 ? 'PM' : 'AM';
+						m = m > 12 ? m - 12 : m;
+						var time = m + ":" + time.split(':')[1] + " " + apm;
 						var timmingDateField = Ext.getCmp('timmingDateField');
 						timmingDateField.setValue(date);
 						var timmingField = Ext.getCmp('timmingField');
 						timmingField.setValue(time);
 					}
 					var contentType = Ext.getCmp('contentType');
-					var record = contentType.getStore().findRecord('index', me.contentType.index);
-					var code = Ext.decode(record.data.code);
-					var cc = Ext.getCmp('contentType-config');
-					Ext.Array.each(code, function(item, index, countriesItSelf) {
-						Ext.Array.each(item.items[0].items, function(item, index, countriesItSelf) {
-							// console.log(me.keyValue[item.name]);
-							item.value = me.keyValue[item.name];
-						});
-					});
-					if (record.data.code != '')
-						cc.add(code);
-					var contentResource = Ext.getCmp('contentResource');
-					var store = contentResource.getStore();
-					if (me.keyValue.p == '3') {
-						store = Ext.create('Push.store.ContentResources');
-						store.filterBy(function(record) {
-							return record.get('index') == 4 || record.get('index') == 2 || record.get('index') == 5;
-						});
-					} else if (me.keyValue.p == '1') {
-						store = Ext.create('Push.store.ContentResources');
-						store.filterBy(function(record) {
-							return record.get('index') == 1 || record.get('index') == 3 || record.get('index') == 6;
-						});
+					if (me.contentType != null) {
+						var record = contentType.getStore().findRecord('index', me.contentType.index);
+						if (record != null) {
+							var code = Ext.decode(record.data.code);
+							var cc = Ext.getCmp('contentType-config');
+							Ext.Array.each(code, function(item, index, countriesItSelf) {
+								Ext.Array.each(item.items[0].items, function(item, index, countriesItSelf) {
+									// console.log(me.keyValue[item.name]);
+									item.value = me.keyValue[item.name];
+								});
+							});
+							if (record.data.code != '')
+								cc.add(code);
+							var contentResource = Ext.getCmp('contentResource');
+							var store = contentResource.getStore();
+							if (me.keyValue.p == '3') {
+								store = Ext.create('Push.store.ContentResources');
+								store.filterBy(function(record) {
+									return record.get('index') == 4 || record.get('index') == 2 || record.get('index') == 5;
+								});
+							} else if (me.keyValue.p == '1') {
+								store = Ext.create('Push.store.ContentResources');
+								store.filterBy(function(record) {
+									return record.get('index') == 1 || record.get('index') == 3 || record.get('index') == 6;
+								});
+							}
+							contentResource.store = store;
+							contentResource.bindStore(contentResource.store);
+							contentResource.setValue(me.keyValue.s);
+						}
 					}
-					contentResource.store = store;
-					contentResource.bindStore(contentResource.store);
-					contentResource.setValue(me.keyValue.s);
-					// if (me.keyValue.p == '1' || me.keyValue.p == '3') {
-					//
-					// }
+
 					//====================================tag========================================
 					var tf = Ext.getCmp('tag-tagField');
 					var tfStore = tf.getStore();
+					console.log("me==============================");
 					tfStore.add(me.tags);
 					if (me.tags.length != 0) {
 						var tagsss = [];
@@ -490,19 +501,19 @@ Ext.define('Push.view.push.PushForm', {
 		text : '发送',
 		handler : function() {
 			var me = this;
-			var session1 = Ext.getStore('Users');
-			session1.load();
-			console.log(session1.getData().getAt(0).get('appId'));
 			var form = Ext.getCmp('push-form');
 			var win = Ext.getCmp('push-form-win');
 			var formValue = form.getValues();
 			var params = {};
-			params.id=win.ctId;
+			params.id = win.ctId;
 			params.title = formValue.title;
 			params.content = formValue.content;
-			params.clientType = formValue.clientType;
-			params.pushType = formValue.pushType;
-			params.appId = session1.getData().getAt(0).get('appId');
+			params.clientType = formValue.clientType.length > 1 ? "ALL" : formValue.clientType;
+			if (win.url == '/web/push/updateAutoConfig') {
+				params.pushType = 'AUTO';
+			} else {
+				params.pushType = formValue.pushType;
+			}
 			var interval = {};
 			interval.sh = formValue.sh;
 			interval.sm = formValue.sm;
@@ -559,9 +570,15 @@ Ext.define('Push.view.push.PushForm', {
 					success : function(response) {
 						var text = response.responseText;
 						Ext.MessageBox.alert('提示', '创建成功', function() {
-							var p = Ext.getCmp('push-list-grid-' + me.up('window').pushType);
-							p.getStore().reload();
+							if (win.url == '/web/push/updateAutoConfig') {
+								var p = Ext.getCmp('autopush-list');
+								p.getStore().reload();
+							} else {
+								var p = Ext.getCmp('push-list-grid-' + me.up('window').pushType);
+								p.getStore().reload();
+							}
 							win.close();
+
 						}, this);
 
 					},
