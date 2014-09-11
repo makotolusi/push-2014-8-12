@@ -35,7 +35,23 @@ Ext.define('Push.view.app.AppList', {
 			},
 			 columnLines: true,
 			// grid columns
-			columns : [{
+			columns : [ {
+				menuDisabled : true,
+				text : "操作",
+				sortable : false,
+				xtype : 'actioncolumn',
+				width : 60,
+				items : [{
+					iconCls : 'push_phone',
+					id : 'enter',
+					tooltip : '推送',
+					handler:'onEnter'
+				},{
+					iconCls : 'push_data',
+					tooltip : '数据采集',
+					handler : 'toCollectionLog'
+				}]
+			},{
 				text : "应用ID",
 				dataIndex : 'appId',
 				width : 80,
@@ -44,46 +60,30 @@ Ext.define('Push.view.app.AppList', {
 			}, {
 				text : "应用名称",
 				dataIndex : 'name',
-				flex : 1,
+				width : 200,
 				sortable : false
 			}, {
 				text : "AppKey_android",
 				dataIndex : 'appKey',
-				flex : 1,
+				width : 200,
 				hidden : false,
 				sortable : true
 			}, {
 				text : "SecretKey_android",
 				dataIndex : 'secretKey',
-				flex : 1,
+				width : 200,
 				align : 'right',
 				sortable : true
 			}, {
 				text : "AppKey_ios",
 				dataIndex : 'appKey_ios',
-				flex : 1,
+		width : 300,
 				sortable : true
 			}, {
 				text : "SecretKey_ios",
 				dataIndex : 'secretKey_ios',
-				flex : 1,
+			width : 300,
 				sortable : true
-			}, {
-				menuDisabled : true,
-				text : "推送设置",
-				sortable : false,
-				xtype : 'actioncolumn',
-				width : 80,
-				items : [{
-					iconCls : 'push_phone',
-					id : 'enter',
-					tooltip : '推送设置',
-					handler:'onEnter'
-				},{
-					iconCls : 'push_data',
-					tooltip : '数据采集',
-					handler : 'toCollectionLog'
-				}]
 			}],
 			// inline buttons
 

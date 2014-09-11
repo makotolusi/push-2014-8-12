@@ -2271,10 +2271,12 @@ Ext.ClassManager.addNameAlternateMappings({
   "Push.view.main.MainModel": [],
   "Push.view.navigation.Breadcrumb": [],
   "Push.view.navigation.Tree": [],
+  "Push.view.push.AutoPushList": [],
   "Push.view.push.PushForm": [],
   "Push.view.push.PushList": [],
   "Push.view.push.PushListTabController": [],
   "Push.view.push.PushListTabs": [],
+  "Push.view.user.AppToRole": [],
   "Push.view.user.ManagerForm": [],
   "Push.view.user.ManagerList": [],
   "Push.view.user.MenuForm": [],
@@ -3241,7 +3243,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Push.Application": [],
   "Push.LoginManager": [],
-  "Push.controller.Global": [],
+  "Push.controller.Global": [
+    "controller.global"
+  ],
   "Push.controller.Main": [],
   "Push.controller.Root": [],
   "Push.model.App": [],
@@ -3397,6 +3401,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Push.view.navigation.Tree": [
     "widget.navigation-tree"
   ],
+  "Push.view.push.AutoPushList": [
+    "widget.autopush-grid"
+  ],
   "Push.view.push.PushForm": [
     "widget.push-from"
   ],
@@ -3408,6 +3415,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Push.view.push.PushListTabs": [
     "widget.push-list-tabs"
+  ],
+  "Push.view.user.AppToRole": [
+    "widget.user-app-role"
   ],
   "Push.view.user.ManagerForm": [],
   "Push.view.user.ManagerList": [

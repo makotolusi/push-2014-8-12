@@ -66,7 +66,7 @@ Ext.define('Push.view.push.AutoPushList', {
 	onShowAutoHistoryClick : function() {
 		var grid = this.down('grid');
 		Ext.suspendLayouts();
-		grid.setTitle('MapReduce');
+		grid.setTitle('自动推送历史');
 		grid.reconfigure(this.createAutoHistoryStore(), this.getAutoHistoryCol());
 		this.down('#autoHistory').disable();
 		this.down('#autoConfig').enable();
@@ -76,7 +76,7 @@ Ext.define('Push.view.push.AutoPushList', {
 	onAutoConfigClick : function() {
 		var grid = this.down('grid');
 		Ext.suspendLayouts();
-		grid.setTitle('Tag');
+		grid.setTitle('自动推送历史');
 		grid.reconfigure(this.createAutoConfigStore(), this.getAutoConfigCol());
 		this.down('#autoConfig').disable();
 		this.down('#autoHistory').enable();
@@ -165,10 +165,7 @@ Ext.define('Push.view.push.AutoPushList', {
 							},
 							success : function(response) {
 								var text = response.responseText;
-								Ext.MessageBox.alert('提示', '操作成功', function() {
-									grid.getStore().reload();
-								}, this);
-
+								grid.getStore().reload();
 							},
 							failure : function(response) {
 								var text = response.responseText;
@@ -221,13 +218,13 @@ Ext.define('Push.view.push.AutoPushList', {
 				});
 				return dd;
 			},
-			width : 250
+			width : 240
 		}, {
 			menuDisabled : true,
 			text : "操作",
 			sortable : false,
 			xtype : 'actioncolumn',
-			width : 120,
+			width : 110,
 			items : [{
 				iconCls : 'grid-edit',
 				tooltip : '编辑',

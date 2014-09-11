@@ -16,22 +16,62 @@ Ext.define('Push.view.push.PushListTabs', {
 	height : 700,
 	pushType : 'IMMEDIATE',
 	initComponent : function() {
-		console.log(this.appId);
-		var im = Ext.create('Push.view.push.PushList', {
-			pushType : 'IMMEDIATE',
-			title : '即时推送',
-			columns : this.getColumn()
+		var me = this, im, tim, msg;
+		Ext.Ajax.request({
+			url : Push.util.Global.ROOT_URL + '/web/app/curAppInfo',
+			method : 'POST',
+			success : function(response) {
+				var text = response.responseText;
+				var obj = Ext.decode(text);
+				if (obj.data == null){
+					msg = "登录首次请先进入应用选择界面功能!";
+						Ext.MessageBox.alert('提示', msg, function() {
+							me.getController().redirectTo('app-list-grid');
+						}, this);
+						return ;
+				}
+				else
+					msg = 'APP ID：' + obj.data.appId + ' <br> APP NAME：<B>' + obj.data.name + '</B> <br> ANDROID KEY：' + obj.data.appKey + "<br> ANDROID SecretKey：" + obj.data.secretKey + " <br> IOS KEY：" + obj.data.appKey_ios + " <br> IOS SecretKey：" + obj.data.secretKey_ios;
+				Ext.toast({
+					html : msg,
+					closable : true,
+					align : 't',
+					slideInDuration : 400,
+					minWidth : 400
+				});
+				if (obj.data != null) {
+					me.setTitle(obj.data.name);
+					// var tab=Ext.getCmp('push-grid-tabs');
+					// tab.add([im, tim]);
+				}
+			},
+			failure : function(response) {
+				var text = response.responseText;
+				Ext.MessageBox.alert('提示', '信息加载失败-' + text, function() {
+					win.close();
+				}, this);
+			}
 		});
-		var tim = Ext.create('Push.view.push.PushList', {
-			pushType : 'TIMING',
-			title : '定时推送',
-			columns : this.getColumn2()
-		});
-		var me = this;
-		Ext.apply(this, {
+
+					im = Ext.create('Push.view.push.PushList', {
+						pushType : 'IMMEDIATE',
+						title : '即时推送',
+						active:true,
+						columns : me.getColumn()
+					});
+					tim = Ext.create('Push.view.push.PushList', {
+						pushType : 'TIMING',
+						title : '定时推送',
+						columns : me.getColumn2()
+					});
+		Ext.apply(me, {
+			title : '',
+			tabBarHeaderPosition : 2,
+			flex : 1,
+			plain : true,
 			items : [im, tim]
 		});
-		this.callParent();
+		me.callParent();
 	},
 	listeners : {
 		scope : 'controller',
@@ -134,7 +174,7 @@ Ext.define('Push.view.push.PushListTabs', {
 			},
 			width : 350
 		}
-		//,      {
+		//,          {
 		// text : "开始时间",
 		// dataIndex : 'startTime',
 		// width : 100

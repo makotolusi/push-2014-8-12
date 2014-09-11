@@ -22,7 +22,7 @@ Ext.define('Push.view.push.PushForm', {
 			jsonData : {
 			},
 			success : function(response) {
-				console.log(me.tags);
+				console.log('================Push.view.push.PushForm');
 				var text = response.responseText;
 				var configApp = Ext.decode(text).app;
 				var contentTypes = Ext.create('Ext.data.Store', {

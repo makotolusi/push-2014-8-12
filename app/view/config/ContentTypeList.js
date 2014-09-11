@@ -142,10 +142,10 @@ Ext.define('Push.view.config.ContentTypeList', {
 				}]
 			}],
 			// paging bar on the bottom
-			bbar : Ext.create('Ext.PagingToolbar', {
-				store : store,
-				items : ['-']
-			})
+			// bbar : Ext.create('Ext.PagingToolbar', {
+				// store : store,
+				// items : ['-']
+			// })
 		});
 		this.callParent();
 	},

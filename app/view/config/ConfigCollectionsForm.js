@@ -10,6 +10,27 @@ Ext.define('Push.view.config.ConfigCollectionsForm', {
 	requires : ['Push.util.Global'],
 	initComponent : function() {
 		var me = this;
+			var type = Ext.create('Ext.data.Store', {
+			fields : ['en', 'name'],
+			data : [{
+				"en" : "DATA",
+				"name" : "数据收集"
+			}, {
+				"en" : "STATICES",
+				"name" : "数据统计"
+			}]
+		});
+		console.log(me.ttype);
+		var typeCombo = Ext.create('Ext.form.ComboBox', {
+			fieldLabel : '类型',
+			store : type,
+			name:'type',
+			queryMode : 'local',
+			displayField : 'name',
+			valueField : 'en',
+				value : me.ttype,
+			id : 'push-collection-type'
+		});
 		Ext.applyIf(me, {
 			items : [{
 				xtype : 'form',
@@ -21,13 +42,13 @@ Ext.define('Push.view.config.ConfigCollectionsForm', {
 					fieldLabel : '名称',
 					value : me.caName,
 					allowBlank : false
-				}, {
+				}, typeCombo,{
 					xtype : 'textfield',
 					name : 'chName',
 					fieldLabel : '中文',
 					value : me.chName,
 					allowBlank : false
-				}, {
+				},{
 					xtype : 'textarea',
 					name : 'code',
 					fieldLabel : '代码',

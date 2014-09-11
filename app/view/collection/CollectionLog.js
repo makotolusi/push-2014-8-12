@@ -35,12 +35,19 @@ Ext.define('Push.view.collection.CollectionLog', {
 				'Content-Type' : 'application/json; charset=utf-8'
 			},
 			jsonData : {
-				appId : session1.getData().getAt(0).get('appId')
 			},
 			success : function(response) {
 				myMask.hide();
-				var collection = Ext.decode(response.responseText).app.collection;
-				console.log(collection);
+				var result = Ext.decode(response.responseText);
+				console.log(result);
+				if (result.message == null) {
+					msg = "登录首次请先进入应用选择界面功能!";
+					Ext.MessageBox.alert('提示', msg, function() {
+						me.getController().redirectTo('app-list-grid');
+					}, this);
+					return;
+				}
+				var collection = result.app.collection;
 				me.collectionCol = Ext.decode(collection[0].code);
 				me.store = Ext.create('Push.store.Collections');
 				me.store.load({
@@ -54,9 +61,14 @@ Ext.define('Push.view.collection.CollectionLog', {
 				});
 				var items = [];
 				me.names = [];
+				me.store.on('beforeload', function() {
+					Ext.apply(me.store.proxy.extraParams, {
+						collectionName : collection[0].name
+					});
+				});
 				Ext.Array.each(collection, function(obj, index, countriesItSelf) {
 					items.push({
-						id: obj.name,
+						id : obj.name,
 						text : obj.chName,
 						scope : this,
 						margin : '0 0 0 10',
@@ -70,6 +82,11 @@ Ext.define('Push.view.collection.CollectionLog', {
 								params : {
 									collectionName : obj.name
 								}
+							});
+							me.store.on('beforeload', function() {
+								Ext.apply(me.store.proxy.extraParams, {
+									collectionName : obj.name
+								});
 							});
 							me.pageBar.bindStore(me.store);
 							me.pageBar.doRefresh();
@@ -105,10 +122,10 @@ Ext.define('Push.view.collection.CollectionLog', {
 					// clicksToEdit : 1
 					// })],
 					columns : me.collectionCol,
-					bbar : this.pageBar
+					bbar : me.pageBar
 					// viewConfig : {
-						// emptyText : '数据未能取出，请重新点击刷新！',
-						// deferEmptyText : false
+					// emptyText : '数据未能取出，请重新点击刷新！',
+					// deferEmptyText : false
 					// }
 				});
 			},

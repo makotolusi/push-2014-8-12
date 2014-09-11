@@ -1,12 +1,11 @@
 /**
  * This example shows how to setup two way drag and drop from one GridPanel to another.
  */
-Ext.define('Push.view.user.MenuToRole', {
+Ext.define('Push.view.user.AppToRole', {
 	extend : 'Ext.panel.Panel',
 	requires : ['Ext.grid.*'],
-	xtype : 'user-menu-role',
+	xtype : 'user-app-role',
 	//<example>
-	exampleTitle : 'Drag and Drop from Grid to Grid Example',
 	otherContent : [{
 		type : 'Model',
 		path : 'app/model/Operation.js'
@@ -42,29 +41,21 @@ Ext.define('Push.view.user.MenuToRole', {
 					type : 'json',
 					rootProperty : 'data'
 				},
-				url : Push.util.Global.ROOT_URL + '/web/operation/listRoleOperation'
+				url : Push.util.Global.ROOT_URL + '/web/app/listAppOfRole'
 			}
 		});
 		var group1 = this.id + 'group1', group2 = this.id + 'group2', columns = [{
 			text : 'ID',
 			flex : 1,
-			dataIndex : 'orderId'
+			dataIndex : 'appId'
 		}, {
 			text : '名称',
 			flex : 1,
 			dataIndex : 'name'
-		}, {
-			text : 'url',
-			flex : 1,
-			dataIndex : 'url'
-		}, {
-			text : 'manageItemId',
-			flex : 1,
-			dataIndex : 'manageItemId'
 		}];
 
 		this.items = [{
-			itemId : 'grid1',
+			itemId : 'grid3',
 			flex : 1,
 			xtype : 'grid',
 			multiSelect : true,
@@ -74,7 +65,7 @@ Ext.define('Push.view.user.MenuToRole', {
 					dragGroup : group1,
 					dropGroup : group2
 				},
-				listeners : {
+				listeners :{
 					beforedrop : function(node, data, overModel, dropPosition, dropHandlers) {
 						dropHandlers.wait = true;
 						if (me.roleId == '' || me.roleId == undefined) {
@@ -86,29 +77,31 @@ Ext.define('Push.view.user.MenuToRole', {
 					},
 					drop : function(node, data, dropRec, dropPosition) {
 						var dropOn = dropRec ? ' ' + dropPosition + ' ' + dropRec.get('name') : ' on empty view';
-						console.log(dropOn);
 						var ids = [];
 						for (var i = 0; i < data.records.length; i++) {
-							ids.push(data.records[i].get('id'));
+							ids.push(data.records[i].get('appId'));
 						}
-						console.log(ids);
 						Ext.Ajax.request({
-							url : Push.util.Global.ROOT_URL + '/web/operation/removeRoles',
+							url : Push.util.Global.ROOT_URL + '/web/role/removeApp',
 							method : 'POST',
-							params : {
-								roleId : me.roleId,
-								ids : ids,
+							headers : {
+								'Content-Type' : 'application/json; charset=utf-8'
+							},
+							jsonData : {
+								id : me.roleId,
+								appIds : ids,
 							},
 							success : function(response) {
 								var text = response.responseText;
-								this.onResetClick(me.roleId);
+								me.onResetClick(me.appId);
 								// Ext.MessageBox.alert('提示', '创建成功', function() {
-								// this.onResetClick(me.roleId);
+								// this.onResetClick(me.appId);
 								// }, this);
 							},
 							failure : function(response) {
 								var text = response.responseText;
 								Ext.MessageBox.alert('提示', '创建失败-' + text, function() {
+									win.close();
 								}, this);
 							}
 						});
@@ -117,7 +110,7 @@ Ext.define('Push.view.user.MenuToRole', {
 			},
 			store : store,
 			columns : columns,
-			title : '菜单列表',
+			title : 'APP列表',
 			tools : [{
 				type : 'refresh',
 				tooltip : 'Reset both grids',
@@ -126,10 +119,10 @@ Ext.define('Push.view.user.MenuToRole', {
 			}],
 			margin : '0 5 0 0'
 		}, {
-			itemId : 'grid2',
+			itemId : 'grid4',
 			flex : 1,
-			multiSelect : true,
 			xtype : 'grid',
+				multiSelect : true,
 			viewConfig : {
 				plugins : {
 					ptype : 'gridviewdragdrop',
@@ -150,20 +143,23 @@ Ext.define('Push.view.user.MenuToRole', {
 						var dropOn = dropRec ? ' ' + dropPosition + ' ' + dropRec.get('name') : ' on empty view';
 						var ids = [];
 						for (var i = 0; i < data.records.length; i++) {
-							ids.push(data.records[i].get('id'));
+							ids.push(data.records[i].get('appId'));
 						}
 						Ext.Ajax.request({
-							url : Push.util.Global.ROOT_URL + '/web/operation/addRoles',
+							url : Push.util.Global.ROOT_URL + '/web/role/addApp',
 							method : 'POST',
-							params : {
-								roleId : me.roleId,
-								ids : ids,
+							headers : {
+								'Content-Type' : 'application/json; charset=utf-8'
+							},
+							jsonData : {
+								id : me.roleId,
+								appIds : ids,
 							},
 							success : function(response) {
 								var text = response.responseText;
-								this.onResetClick(me.roleId);
+								me.onResetClick(me.appId);
 								// Ext.MessageBox.alert('提示', '创建成功', function() {
-								// this.onResetClick(me.roleId);
+								// this.onResetClick(me.appId);
 								// }, this);
 							},
 							failure : function(response) {
@@ -195,32 +191,40 @@ Ext.define('Push.view.user.MenuToRole', {
 						type : 'json',
 						rootProperty : 'data'
 					},
-					url : Push.util.Global.ROOT_URL + '/web/operation/listRoleOperation'//+me.roleId
+					url : Push.util.Global.ROOT_URL + '/web/app/listAppOfRole'//+me.appId
 				}
 			}),
 			columns : columns,
 			stripeRows : true,
-			title : '权限列表'
+			title : 'APP权限'
 		}];
 
 		this.callParent();
 	},
 
 	onResetClick : function(roleId) {
-		var me = this;
+		var me=this;
+		console.log(me.roleId);
+		// if(roleId==999){
+		// this.down('#grid3').getStore().load();
+		// //purge destination grid
+		// this.down('#grid4').getStore().load();
+		// }else{
+// 			
 		//refresh source grid
-		this.down('#grid1').getStore().load({
+		this.down('#grid3').getStore().load({
 			params : {
 				roleId : me.roleId,
 				out : 1
 			}
 		});
 		//purge destination grid
-		this.down('#grid2').getStore().load({
+		this.down('#grid4').getStore().load({
 			params : {
 				roleId : me.roleId,
 				out : 0
 			}
 		});
+		// }
 	}
 });

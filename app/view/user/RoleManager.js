@@ -6,7 +6,7 @@ Ext.define('Push.view.user.RoleManager', {
 	requires : ['Ext.grid.*'],
 	xtype : 'role-manager',
 	bodyStyle : 'background-color:transparent',
-	id:'role-manager-panel',
+	id : 'role-manager-panel',
 	//<example>
 	exampleTitle : '角色管理',
 	otherContent : [{
@@ -27,13 +27,13 @@ Ext.define('Push.view.user.RoleManager', {
 	},
 	//</example>
 
-
 	height : 1400,
 	width : 1000,
 
 	initComponent : function() {
 		var me = this;
-		var menuToRole=Ext.create('Push.view.user.MenuToRole');
+		var menuToRole = Ext.create('Push.view.user.MenuToRole');
+		var appToRole = Ext.create('Push.view.user.AppToRole');
 		var store = Ext.create('Push.store.Roles');
 		me.width = me.themeInfo.width;
 		Ext.applyIf(me, {
@@ -74,8 +74,10 @@ Ext.define('Push.view.user.RoleManager', {
 						tooltip : '权限',
 						handler : function(grid, rowIndex, colIndex) {
 							var rec = grid.getStore().getAt(rowIndex);
-							menuToRole.roleId=rec.get('id');
+							menuToRole.roleId = rec.get('id');
 							menuToRole.onResetClick(menuToRole.roleId);
+							appToRole.roleId = rec.get('id');
+							appToRole.onResetClick(appToRole.roleId);
 							console.log("Edit " + rec.get('id'));
 						}
 					}]
@@ -87,34 +89,34 @@ Ext.define('Push.view.user.RoleManager', {
 					items : [{
 						iconCls : 'act-col-user-del',
 						tooltip : '删除',
-							handler : function(grid, rowIndex, colIndex) {
+						handler : function(grid, rowIndex, colIndex) {
 							Ext.MessageBox.confirm('Confirm', '确认删除吗?', function(btn, text) {
-							if (btn == 'yes') {
-								var rec = grid.getStore().getAt(rowIndex);
-								Ext.Ajax.request({
-									url : Push.util.Global.ROOT_URL + '/web/role/delete',
-									method : 'POST',
-									headers : {
-										'Content-Type' : 'application/json; charset=utf-8'
-									},
-									jsonData : {
-										id : rec.get('id'),
-									},
-									success : function(response) {
-										var text = response.responseText;
-										Ext.MessageBox.alert('提示', '删除成功', function() {
-											grid.getStore().reload();
-										}, this);
+								if (btn == 'yes') {
+									var rec = grid.getStore().getAt(rowIndex);
+									Ext.Ajax.request({
+										url : Push.util.Global.ROOT_URL + '/web/role/delete',
+										method : 'POST',
+										headers : {
+											'Content-Type' : 'application/json; charset=utf-8'
+										},
+										jsonData : {
+											id : rec.get('id'),
+										},
+										success : function(response) {
+											var text = response.responseText;
+											Ext.MessageBox.alert('提示', '删除成功', function() {
+												grid.getStore().reload();
+											}, this);
 
-									},
-									failure : function(response) {
-										var text = response.responseText;
-										Ext.MessageBox.alert('提示', '创建失败-' + text, function() {
-										}, this);
-									}
-								});
-							}
-						});
+										},
+										failure : function(response) {
+											var text = response.responseText;
+											Ext.MessageBox.alert('提示', '创建失败-' + text, function() {
+											}, this);
+										}
+									});
+								}
+							});
 						}
 					}]
 				}],
@@ -144,7 +146,7 @@ Ext.define('Push.view.user.RoleManager', {
 				// frame : true,
 				title : '角色',
 				iconCls : 'icon-grid'
-			},menuToRole]
+			}, menuToRole, appToRole]
 		});
 
 		me.callParent(arguments);

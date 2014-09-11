@@ -87,10 +87,11 @@ Ext.define('Push.view.push.PushList', {
 				xtype : 'toolbar',
 				items : [{
 					xtype : 'textfield',
+					iconCls : 'push_search',
 					fieldLabel : '推送标题',
 					id : 'push-title-' + this.pushType,
 					name : 'title'
-				}, combo, jobStateCombo,{
+				}, combo, jobStateCombo, {
 					text : '查询',
 					id : 'push-list-query-btn-' + this.pushType,
 					handler : function(a) {

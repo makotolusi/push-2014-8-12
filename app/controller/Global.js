@@ -200,7 +200,7 @@ Ext.define('Push.controller.Global', {
 
 		cmp = new ViewClass();
 		contentPanel.add(cmp);
-		this.setupPreview(clsProto);
+		// this.setupPreview(clsProto);
 		if (cmp.floating) {
 			cmp.show();
 		}

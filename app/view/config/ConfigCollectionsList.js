@@ -82,6 +82,7 @@ Ext.define('Push.view.config.ConfigCollectionsList', {
 							caName : rec.get('name'),
 							caName : rec.get('name'),
 							code : rec.get('code'),
+							ttype : rec.get('type'),
 							chName : rec.get('chName')
 						});
 						win.show();
