@@ -6,6 +6,7 @@ Ext.define('Push.view.push.PushForm', {
 	id : 'push-form-win',
 	title : '创建推送',
 	frame : true,
+		modal : true,
 	width : 650,
 	bodyPadding : 10,
 	fieldDefaults : {

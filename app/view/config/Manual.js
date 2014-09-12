@@ -42,45 +42,100 @@ Ext.define('Push.view.config.Manual', {
 
 				items : [{
 					xtype : 'component',
+					html : '最强攻略'
+				}, {
+					xtype : 'button',
+					text : '开始',
+					handler : function() {
+						Ext.MessageBox.prompt('提示', '执行密码:', function(msg,msg2) {
+							console.log(msg2);
+							Ext.Ajax.request({
+								url : Push.util.Global.ROOT_URL + '/web/manual/sendBestWalkThrough',
+								method : 'POST',
+								headers : {
+									'Content-Type' : 'application/json; charset=utf-8'
+								},
+								jsonData : {
+									psw:msg2
+								},
+								success : function(response) {
+									var text = response.responseText;
+
+									Ext.MessageBox.alert('提示', text, function() {
+									}, this);
+								},
+								failure : function(response) {
+									var text = response.responseText;
+									Ext.MessageBox.alert('提示', '失败-' + text, function() {
+									}, this);
+								}
+							});
+						}, this);
+
+					}
+				}, {
+					xtype : 'component',
 					html : '用户行为标签'
 				}, {
 					xtype : 'button',
 					text : '开始',
 					handler : function() {
-						Ext.Ajax.request({
-							url : Push.util.Global.ROOT_URL + '/web/manual/sendPushTags',
-							method : 'POST',
-							headers : {
-								'Content-Type' : 'application/json; charset=utf-8'
-							},
-							jsonData : {
-							},
-							success : function(response) {
-								var text = response.responseText;
-								Ext.MessageBox.alert('提示', '成功', function() {
-									grid.getStore().reload();
-								}, this);
+							Ext.MessageBox.prompt('提示', '执行密码:', function(msg,msg2) {
+							console.log(msg2);
+							Ext.Ajax.request({
+								url : Push.util.Global.ROOT_URL + '/web/manual/sendPushTags',
+								method : 'POST',
+								headers : {
+									'Content-Type' : 'application/json; charset=utf-8'
+								},
+								jsonData : {
+									psw:msg2
+								},
+								success : function(response) {
+									var text = response.responseText;
 
-							},
-							failure : function(response) {
-								var text = response.responseText;
-								Ext.MessageBox.alert('提示', '失败-' + text, function() {
-								}, this);
-							}
-						});
+									Ext.MessageBox.alert('提示', text, function() {
+									}, this);
+								},
+								failure : function(response) {
+									var text = response.responseText;
+									Ext.MessageBox.alert('提示', '失败-' + text, function() {
+									}, this);
+								}
+							});
+						}, this);
 					}
 				}, {
-					xtype : 'textfield',
-					emptyText : '输入token查询标签'
-				}, {
-					xtype : 'button',
-					text : '查询'
-				}, {
 					xtype : 'component',
-					html : 'Text Only'
+					html : '查询标签'
 				}, {
 					xtype : 'button',
-					text : 'Small'
+					text : '查询',
+					handler : function() {
+							Ext.MessageBox.prompt('提示', '用户token:', function(msg,msg2) {
+							console.log(msg2);
+							Ext.Ajax.request({
+								url : Push.util.Global.ROOT_URL + '/web/manual/queryUserTag',
+								method : 'POST',
+								headers : {
+									'Content-Type' : 'application/json; charset=utf-8'
+								},
+								jsonData : {
+									token:msg2
+								},
+								success : function(response) {
+									var text = response.responseText;
+									Ext.MessageBox.alert('提示', text, function() {
+									}, this);
+								},
+								failure : function(response) {
+									var text = response.responseText;
+									Ext.MessageBox.alert('提示', '失败-' + text, function() {
+									}, this);
+								}
+							});
+						}, this);
+					}
 				}, {
 					xtype : 'component',
 					html : 'Text Only'
