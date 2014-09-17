@@ -196,6 +196,7 @@ Ext.define('Push.view.push.PushForm', {
 									scope : this,
 									'select' : function(combo, record, index) {
 										var contentResource = Ext.getCmp('contentResource');
+										contentResource.setValue('');
 										var n = 1;
 										if (record[0].data.desc == 'NEWS' || record[0].data.desc == 'VIDEO') {
 											contentResource.disabled = false;

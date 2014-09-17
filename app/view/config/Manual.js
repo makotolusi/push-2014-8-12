@@ -48,7 +48,6 @@ Ext.define('Push.view.config.Manual', {
 					text : '开始',
 					handler : function() {
 						Ext.MessageBox.prompt('提示', '执行密码:', function(msg,msg2) {
-							console.log(msg2);
 							Ext.Ajax.request({
 								url : Push.util.Global.ROOT_URL + '/web/manual/sendBestWalkThrough',
 								method : 'POST',
@@ -81,7 +80,6 @@ Ext.define('Push.view.config.Manual', {
 					text : '开始',
 					handler : function() {
 							Ext.MessageBox.prompt('提示', '执行密码:', function(msg,msg2) {
-							console.log(msg2);
 							Ext.Ajax.request({
 								url : Push.util.Global.ROOT_URL + '/web/manual/sendPushTags',
 								method : 'POST',
@@ -113,7 +111,6 @@ Ext.define('Push.view.config.Manual', {
 					text : '查询',
 					handler : function() {
 							Ext.MessageBox.prompt('提示', '用户token:', function(msg,msg2) {
-							console.log(msg2);
 							Ext.Ajax.request({
 								url : Push.util.Global.ROOT_URL + '/web/manual/queryUserTag',
 								method : 'POST',
@@ -125,6 +122,7 @@ Ext.define('Push.view.config.Manual', {
 								},
 								success : function(response) {
 									var text = response.responseText;
+									console.log(Ext.decode(text));
 									Ext.MessageBox.alert('提示', text, function() {
 									}, this);
 								},
@@ -136,12 +134,37 @@ Ext.define('Push.view.config.Manual', {
 							});
 						}, this);
 					}
-				}, {
+				},{
 					xtype : 'component',
-					html : 'Text Only'
+					html : '删除标签'
 				}, {
 					xtype : 'button',
-					text : 'Small'
+					text : '执行',
+					handler : function() {
+							Ext.MessageBox.prompt('提示', '用户token:', function(msg,msg2) {
+							Ext.Ajax.request({
+								url : Push.util.Global.ROOT_URL + '/web/manual/deleteUserTag',
+								method : 'POST',
+								headers : {
+									'Content-Type' : 'application/json; charset=utf-8'
+								},
+								jsonData : {
+									token:msg2
+								},
+								success : function(response) {
+									var text = response.responseText;
+									console.log(Ext.decode(text));
+									Ext.MessageBox.alert('提示', text, function() {
+									}, this);
+								},
+								failure : function(response) {
+									var text = response.responseText;
+									Ext.MessageBox.alert('提示', '失败-' + text, function() {
+									}, this);
+								}
+							});
+						}, this);
+					}
 				}]
 			}]
 		});
