@@ -97,7 +97,17 @@ Ext.define('Push.view.push.PushForm', {
 						id : 'pushType-im',
 						checked : me.url == '/web/push/sendAgain' ? (me.pushType == 'IMMEDIATE' ? true : false) : true,
 						disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'IMMEDIATE' ? false : true) : false,
-						inputValue : 'IMMEDIATE'
+						inputValue : 'IMMEDIATE',
+						handler : function(box, checked) {
+								var timmingFieldC = Ext.getCmp('timmingFieldContainer');
+							timmingFieldC.el.animate({
+								opacity : 1
+							});
+							var timmingDateField = Ext.getCmp('timmingDateField');
+							timmingDateField.disabled = false;
+							var timmingField = Ext.getCmp('timmingField');
+							timmingField.disabled = false;
+						}
 					}, {
 						boxLabel : '定时发送',
 						name : 'pushType',
@@ -108,12 +118,12 @@ Ext.define('Push.view.push.PushForm', {
 						handler : function(box, checked) {
 							var timmingFieldC = Ext.getCmp('timmingFieldContainer');
 							timmingFieldC.el.animate({
-								opacity : checked ? 1 : 0.3
+								opacity : 0.3
 							});
 							var timmingDateField = Ext.getCmp('timmingDateField');
-							timmingDateField.disabled = false;
+							timmingDateField.disabled = true;
 							var timmingField = Ext.getCmp('timmingField');
-							timmingField.disabled = false;
+							timmingField.disabled = true;
 						}
 					}]
 				};
@@ -366,14 +376,6 @@ Ext.define('Push.view.push.PushForm', {
 											},
 											scope : this
 										});
-										// tagStore.on("load", function() {
-										// var num = tagStore.getCount();
-										// if (num > 10) {
-										// // var tagField = Ext.getCmp('tag-tagField');
-										// tagField.queryMode = 'local';
-										// console.log(tagField);
-										// }
-										// });
 									}
 								},
 							},
@@ -426,6 +428,7 @@ Ext.define('Push.view.push.PushForm', {
 				if (me.url == '/web/push/sendAgain' || me.url == '/web/push/updateAutoConfig') {
 					if (me.pushType == 'TIMING') {
 						console.log(me.nextFireTime);
+						if(me.nextFireTime!=null){
 						var date = me.nextFireTime.split(' ')[0];
 						var time = me.nextFireTime.split(' ')[1];
 						var m = parseInt(time.split(':')[0]);
@@ -436,6 +439,7 @@ Ext.define('Push.view.push.PushForm', {
 						timmingDateField.setValue(date);
 						var timmingField = Ext.getCmp('timmingField');
 						timmingField.setValue(time);
+						}
 					}
 					var contentType = Ext.getCmp('contentType');
 					if (me.contentType != null) {
@@ -510,7 +514,8 @@ Ext.define('Push.view.push.PushForm', {
 			params.id = win.ctId;
 			params.title = formValue.title;
 			params.content = formValue.content;
-			params.clientType = formValue.clientType.length > 1 ? "ALL" : formValue.clientType;
+			console.log(Ext.isArray(formValue.clientType));
+			params.clientType = Ext.isArray(formValue.clientType) ? "ALL" : formValue.clientType;
 			if (win.url == '/web/push/updateAutoConfig') {
 				params.pushType = 'AUTO';
 			} else {

@@ -165,6 +165,37 @@ Ext.define('Push.view.config.Manual', {
 							});
 						}, this);
 					}
+				}, {
+					xtype : 'component',
+					html : '老数据标签'
+				}, {
+					xtype : 'button',
+					text : '开始',
+					handler : function() {
+							Ext.MessageBox.prompt('提示', '用户token:', function(msg,msg2) {
+							Ext.Ajax.request({
+								url : Push.util.Global.ROOT_URL + '/web/manual/sendOld',
+								method : 'POST',
+								headers : {
+									'Content-Type' : 'application/json; charset=utf-8'
+								},
+								jsonData : {
+									psw:msg2
+								},
+								success : function(response) {
+									var text = response.responseText;
+									console.log(Ext.decode(text));
+									Ext.MessageBox.alert('提示', text, function() {
+									}, this);
+								},
+								failure : function(response) {
+									var text = response.responseText;
+									Ext.MessageBox.alert('提示', '失败-' + text, function() {
+									}, this);
+								}
+							});
+						}, this);
+					}
 				}]
 			}]
 		});

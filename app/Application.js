@@ -10,7 +10,7 @@ Ext.define('Push.Application', {
 	namespace : 'Push',
 	requires : ['Push.view.login.Login'],
 	autoCreateViewport : false,
-	views : ['user.AppToRole','push.AutoPushList','Logout', 'config.ConfigCollectionsList', 'collection.CollectionLog', 'user.ManagerList', 'config.Manual', 'config.ActionList', 'collection.JobLog', 'config.SystemConfigList', 'config.ConfigAppsList', 'config.ContentTypeList', 'config.ContentTypeForm', 'login.Login', 'form.FieldTypes', 'user.MenuManager', 'user.RoleManager', 'user.MenuToRole', 'app.AppList', 'push.PushList', 'push.PushListTabs', 'navigation.Breadcrumb', 'Header', 'ContentPanel', 'navigation.Tree', 'grid.ArrayGrid', 'grid.Paging', 'grid.GridPlugins', 'form.HBoxLayoutForm', 'form.RadioGroupForm'],
+	views : ['push.AutoLocalPushList','user.PasswordEdit','user.AppToRole','push.AutoPushList','Logout', 'config.ConfigCollectionsList', 'collection.CollectionLog', 'user.ManagerList', 'config.Manual', 'config.ActionList', 'collection.JobLog', 'config.SystemConfigList', 'config.ConfigAppsList', 'config.ContentTypeList', 'config.ContentTypeForm', 'login.Login', 'form.FieldTypes', 'user.MenuManager', 'user.RoleManager', 'user.MenuToRole', 'app.AppList', 'push.PushList', 'push.PushListTabs', 'navigation.Breadcrumb', 'Header', 'ContentPanel', 'navigation.Tree', 'grid.ArrayGrid', 'grid.Paging', 'grid.GridPlugins', 'form.HBoxLayoutForm', 'form.RadioGroupForm'],
 
 	controllers : ['Global'],
 
@@ -45,7 +45,6 @@ Ext.define('Push.Application', {
 					var r = Ext.decode(text);
 					if (r.SUC) {
 							me.redirectTo('app-list-grid');
-							console.log(Ext.getCmp('app-main'));
 					}else{
 						var session = this.session = new Ext.data.Session();
 						new Push.view.login.Login({

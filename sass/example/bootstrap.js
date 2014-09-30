@@ -2271,6 +2271,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "Push.view.main.MainModel": [],
   "Push.view.navigation.Breadcrumb": [],
   "Push.view.navigation.Tree": [],
+  "Push.view.push.AutoLocalForm": [],
+  "Push.view.push.AutoLocalPushList": [],
   "Push.view.push.AutoPushList": [],
   "Push.view.push.PushForm": [],
   "Push.view.push.PushList": [],
@@ -2282,6 +2284,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Push.view.user.MenuForm": [],
   "Push.view.user.MenuManager": [],
   "Push.view.user.MenuToRole": [],
+  "Push.view.user.PasswordEdit": [],
   "Push.view.user.RoleForm": [],
   "Push.view.user.RoleManager": []
 });
@@ -3401,6 +3404,12 @@ Ext.ClassManager.addNameAliasMappings({
   "Push.view.navigation.Tree": [
     "widget.navigation-tree"
   ],
+  "Push.view.push.AutoLocalForm": [
+    "widget.autolocal-from"
+  ],
+  "Push.view.push.AutoLocalPushList": [
+    "widget.autolocalpush-grid"
+  ],
   "Push.view.push.AutoPushList": [
     "widget.autopush-grid"
   ],
@@ -3429,6 +3438,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Push.view.user.MenuToRole": [
     "widget.user-menu-role"
+  ],
+  "Push.view.user.PasswordEdit": [
+    "widget.password-edit"
   ],
   "Push.view.user.RoleForm": [],
   "Push.view.user.RoleManager": [

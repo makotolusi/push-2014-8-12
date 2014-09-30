@@ -183,6 +183,10 @@ Ext.define('Push.view.push.PushListTabs', {
 			text : "任务状态",
 			dataIndex : 'jobState',
 			width : 100
+		},  {
+			text : "推送状态",
+			dataIndex : 'sendState',
+			width : 100
 		}, {
 			text : "下次执行时间",
 			dataIndex : 'nextFireTime',
