@@ -196,6 +196,34 @@ Ext.define('Push.view.config.Manual', {
 							});
 						}, this);
 					}
+				}, {
+					xtype : 'component',
+					html : '同步app'
+				}, {
+					xtype : 'button',
+					text : '开始',
+					handler : function() {
+							Ext.Ajax.request({
+								url : Push.util.Global.ROOT_URL + '/web/manual/syncApp',
+								method : 'POST',
+								headers : {
+									'Content-Type' : 'application/json; charset=utf-8'
+								},
+								jsonData : {
+								},
+								success : function(response) {
+									var text = response.responseText;
+									console.log(Ext.decode(text));
+									Ext.MessageBox.alert('提示', text, function() {
+									}, this);
+								},
+								failure : function(response) {
+									var text = response.responseText;
+									Ext.MessageBox.alert('提示', '失败-' + text, function() {
+									}, this);
+								}
+							});
+					}
 				}]
 			}]
 		});

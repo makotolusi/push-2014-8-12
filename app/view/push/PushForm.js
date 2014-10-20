@@ -6,7 +6,7 @@ Ext.define('Push.view.push.PushForm', {
 	id : 'push-form-win',
 	title : '创建推送',
 	frame : true,
-		modal : true,
+	modal : true,
 	width : 650,
 	bodyPadding : 10,
 	fieldDefaults : {
@@ -99,7 +99,7 @@ Ext.define('Push.view.push.PushForm', {
 						disabled : me.url == '/web/push/sendAgain' ? (me.pushType == 'IMMEDIATE' ? false : true) : false,
 						inputValue : 'IMMEDIATE',
 						handler : function(box, checked) {
-								var timmingFieldC = Ext.getCmp('timmingFieldContainer');
+							var timmingFieldC = Ext.getCmp('timmingFieldContainer');
 							timmingFieldC.el.animate({
 								opacity : 1
 							});
@@ -428,17 +428,17 @@ Ext.define('Push.view.push.PushForm', {
 				if (me.url == '/web/push/sendAgain' || me.url == '/web/push/updateAutoConfig') {
 					if (me.pushType == 'TIMING') {
 						console.log(me.nextFireTime);
-						if(me.nextFireTime!=null){
-						var date = me.nextFireTime.split(' ')[0];
-						var time = me.nextFireTime.split(' ')[1];
-						var m = parseInt(time.split(':')[0]);
-						var apm = m > 12 ? 'PM' : 'AM';
-						m = m > 12 ? m - 12 : m;
-						var time = m + ":" + time.split(':')[1] + " " + apm;
-						var timmingDateField = Ext.getCmp('timmingDateField');
-						timmingDateField.setValue(date);
-						var timmingField = Ext.getCmp('timmingField');
-						timmingField.setValue(time);
+						if (me.nextFireTime != null) {
+							var date = me.nextFireTime.split(' ')[0];
+							var time = me.nextFireTime.split(' ')[1];
+							var m = parseInt(time.split(':')[0]);
+							var apm = m > 12 ? 'PM' : 'AM';
+							m = m > 12 ? m - 12 : m;
+							var time = m + ":" + time.split(':')[1] + " " + apm;
+							var timmingDateField = Ext.getCmp('timmingDateField');
+							timmingDateField.setValue(date);
+							var timmingField = Ext.getCmp('timmingField');
+							timmingField.setValue(time);
 						}
 					}
 					var contentType = Ext.getCmp('contentType');
@@ -505,6 +505,7 @@ Ext.define('Push.view.push.PushForm', {
 
 	buttons : [{
 		text : '发送',
+		id : 'sendbtn',
 		handler : function() {
 			var me = this;
 			var form = Ext.getCmp('push-form');
@@ -567,6 +568,11 @@ Ext.define('Push.view.push.PushForm', {
 			console.log(params);
 			console.log(form.isValid());
 			if (form.isValid()) {
+				var sendbtn = Ext.getCmp('sendbtn');
+				sendbtn.el.animate({
+					opacity : 0.3
+				});
+				sendbtn.disabled = true;
 				Ext.Ajax.request({
 					url : Push.util.Global.ROOT_URL + '/web/push/condition',
 					method : 'POST',
@@ -599,7 +605,7 @@ Ext.define('Push.view.push.PushForm', {
 						}, this);
 					}
 				});
-			}
-		}
-	}]
-});
+				}
+				}
+				}]
+				});
