@@ -92,6 +92,10 @@ Ext.define('Push.view.push.PushListTabs', {
 	},
 	getColumn : function() {
 		return [{
+			text : "Id",
+			dataIndex : 'id',
+			hidden : false
+		}, {
 			text : "推送时间",
 			dataIndex : 'sendDate',
 			width : 150
@@ -144,7 +148,7 @@ Ext.define('Push.view.push.PushListTabs', {
 		return [{
 			text : "Id",
 			dataIndex : 'id',
-			hidden : true
+			hidden : false
 		}, this.getContentTypeCol(), {
 			text : "标题",
 			dataIndex : 'title',

@@ -24,8 +24,10 @@ Ext.define('Push.view.push.PushForm', {
 			},
 			success : function(response) {
 				console.log('================Push.view.push.PushForm');
+				
 				var text = response.responseText;
 				var configApp = Ext.decode(text).app;
+				console.log(Ext.decode(text));
 				var contentTypes = Ext.create('Ext.data.Store', {
 					fields : ['index', 'name'],
 					data : configApp.contentTypes
@@ -546,6 +548,7 @@ Ext.define('Push.view.push.PushForm', {
 					// code:obj.data.code
 				});
 			});
+			console.log(selectedTag);
 			params.keyValue = keyValue;
 			params.tags = tags;
 			params.tagRelation = Ext.getCmp('tag-rel-radio').getValue().tagRelation;

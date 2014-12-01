@@ -224,6 +224,37 @@ Ext.define('Push.view.config.Manual', {
 								}
 							});
 					}
+				}, {
+					xtype : 'component',
+					html : '查询推送LOG'
+				}, {
+					xtype : 'button',
+					text : '查询',
+					handler : function() {
+						Ext.MessageBox.prompt('提示', '信鸽推送日志:', function(msg,msg2) {
+							Ext.Ajax.request({
+								url : Push.util.Global.ROOT_URL + '/web/manual/queryPushByID',
+								method : 'POST',
+								headers : {
+									'Content-Type' : 'application/json; charset=utf-8'
+								},
+								jsonData : {
+									pushId:msg2
+								},
+								success : function(response) {
+									var text = response.responseText;
+									console.log(Ext.decode(text));
+									Ext.MessageBox.alert('提示', text, function() {
+									}, this);
+								},
+								failure : function(response) {
+									var text = response.responseText;
+									Ext.MessageBox.alert('提示', '失败-' + text, function() {
+									}, this);
+								}
+							});
+						}, this);
+					}
 				}]
 			}]
 		});
