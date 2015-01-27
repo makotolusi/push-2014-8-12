@@ -24,7 +24,7 @@ Ext.define('Push.view.push.PushForm', {
 			},
 			success : function(response) {
 				console.log('================Push.view.push.PushForm');
-				
+
 				var text = response.responseText;
 				var configApp = Ext.decode(text).app;
 				console.log(Ext.decode(text));
@@ -173,6 +173,66 @@ Ext.define('Push.view.push.PushForm', {
 						padding : '0 0 0 10',
 						anchor : '100%'
 					}]
+				};
+				var userScope = {
+					xtype : 'fieldset',
+					title : '用户群',
+					style : {
+						position : 'inherit'
+					},
+					width : 620,
+					layout : 'anchor',
+					collapsible : true,
+					defaults : {
+						anchor : '100%'
+					},
+					items : [{
+						xtype : 'radiogroup',
+						fieldLabel : '标签类型',
+						id : 'tag-radio',
+						cls : 'x-check-group-alt',
+						columns : [100, 100, 100, 100, 100],
+						vertical : true,
+						listeners : {
+							'change' : {
+								fn : function(ths, newValue, oldValue, eOpts) {
+									index = newValue['tag-radio'];
+									console.log(index);
+									var tagField = Ext.getCmp('tag-tagField');
+									tagStore.load({
+										params : {
+											index : index
+										},
+										scope : this
+									});
+								}
+							},
+						},
+						items : []
+					}, {
+						xtype : 'radiogroup',
+						fieldLabel : '标签关系',
+						id : 'tag-rel-radio',
+						cls : 'x-check-group-alt',
+						columns : [100, 100],
+						vertical : true,
+						listeners : {
+							'change' : {
+								fn : function(ths, newValue, oldValue, eOpts) {
+								}
+							},
+						},
+						items : [{
+							boxLabel : 'AND',
+							name : 'tagRelation',
+							inputValue : 'AND',
+							checked : true
+						}, {
+							boxLabel : 'OR',
+							name : 'tagRelation',
+							inputValue : 'OR'
+						}]
+					}, tagField]
 				};
 				var contentType = {
 					xtype : 'fieldset',
@@ -347,66 +407,7 @@ Ext.define('Push.view.push.PushForm', {
 								allowBlank : false
 							}]
 						}]
-					}, contentType, {
-						xtype : 'fieldset',
-						title : '用户群',
-						style : {
-							position : 'inherit'
-						},
-						width : 620,
-						layout : 'anchor',
-						collapsible : true,
-						defaults : {
-							anchor : '100%'
-						},
-						items : [{
-							xtype : 'radiogroup',
-							fieldLabel : '标签类型',
-							id : 'tag-radio',
-							cls : 'x-check-group-alt',
-							columns : [100, 100, 100, 100, 100],
-							vertical : true,
-							listeners : {
-								'change' : {
-									fn : function(ths, newValue, oldValue, eOpts) {
-										index = newValue['tag-radio'];
-										console.log(index);
-										var tagField = Ext.getCmp('tag-tagField');
-										tagStore.load({
-											params : {
-												index : index
-											},
-											scope : this
-										});
-									}
-								},
-							},
-							items : []
-						}, {
-							xtype : 'radiogroup',
-							fieldLabel : '标签关系',
-							id : 'tag-rel-radio',
-							cls : 'x-check-group-alt',
-							columns : [100, 100],
-							vertical : true,
-							listeners : {
-								'change' : {
-									fn : function(ths, newValue, oldValue, eOpts) {
-									}
-								},
-							},
-							items : [{
-								boxLabel : 'AND',
-								name : 'tagRelation',
-								inputValue : 'AND',
-								checked : true
-							}, {
-								boxLabel : 'OR',
-								name : 'tagRelation',
-								inputValue : 'OR'
-							}]
-						}, tagField]
-					}]
+					}, contentType, configApp.tagTypes.length==0?null:userScope]
 				});
 				// ====================config=====================
 				// var cc = Ext.getCmp('contentType-config');
@@ -539,19 +540,21 @@ Ext.define('Push.view.push.PushForm', {
 			console.log(keyValue);
 			var cc = Ext.getCmp('contentType-config');
 			var autoCode = Ext.ComponentQuery.query('textfield[id^=auto-code-content]');
-			var selectedTag = Ext.getCmp('tag-tagField').getValueRecords();
 			var tags = [];
-			Ext.Array.each(selectedTag, function(obj, index, countriesItSelf) {
-				tags.push({
-					tagId : obj.data.tagId,
-					tagName : obj.data.tagName
-					// code:obj.data.code
+			if (Ext.getCmp('tag-tagField') != undefined) {
+				var selectedTag = Ext.getCmp('tag-tagField').getValueRecords();
+				Ext.Array.each(selectedTag, function(obj, index, countriesItSelf) {
+					tags.push({
+						tagId : obj.data.tagId,
+						tagName : obj.data.tagName
+						// code:obj.data.code
+					});
 				});
-			});
-			console.log(selectedTag);
+				console.log(selectedTag);
+			}
 			params.keyValue = keyValue;
 			params.tags = tags;
-			params.tagRelation = Ext.getCmp('tag-rel-radio').getValue().tagRelation;
+			params.tagRelation = Ext.getCmp('tag-rel-radio')==undefined?null:Ext.getCmp('tag-rel-radio').getValue().tagRelation;
 			var exp = "0";
 			var timmingDateField = Ext.getCmp('timmingDateField').getRawValue();
 			var timmingField = Ext.getCmp('timmingField').getRawValue();
@@ -608,7 +611,7 @@ Ext.define('Push.view.push.PushForm', {
 						}, this);
 					}
 				});
-				}
-				}
-				}]
-				});
+			}
+		}
+	}]
+});
