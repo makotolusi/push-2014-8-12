@@ -24,7 +24,6 @@ Ext.define('Push.view.push.PushForm', {
 			},
 			success : function(response) {
 				console.log('================Push.view.push.PushForm');
-
 				var text = response.responseText;
 				var configApp = Ext.decode(text).app;
 				console.log(Ext.decode(text));
@@ -335,21 +334,60 @@ Ext.define('Push.view.push.PushForm', {
 						layout : 'anchor',
 						items : [{
 							xtype : 'textfield',
+							id : 'title',
 							width : 550,
 							maxLength : 20,
 							allowBlank : false,
 							name : 'title',
+							//fieldStyle: 'color:#87CEEB',
 							value : me.ctTitle,
 							fieldLabel : '推送标题'
 						}, {
+							xtype : 'splitbutton',
+							text : '标题颜色',
+							textAlign : 'right',
+							menu : [{
+								xtype : 'colorpicker',
+								listeners : {
+									select : function(picker, selColor) {
+										var title = Ext.getCmp('title');
+										title.setFieldStyle('color:#' + selColor);
+										var c1 = Ext.getCmp('color1');
+										c1.setValue(selColor);
+									}
+								}
+							}]
+						}, {
+							xtype : 'hiddenfield',
+							id : "color1"
+						}, {
+							xtype : 'hiddenfield',
+							id : "color2"
+						}, {
 							xtype : 'textareafield',
 							width : 550,
+							id : 'content',
 							height : 150,
 							maxLength : 40,
 							allowBlank : false,
 							name : 'content',
 							value : me.ctContent,
 							fieldLabel : '推送内容'
+						}, {
+							xtype : 'splitbutton',
+							text : '内容颜色',
+							textAlign : 'right',
+							menu : [{
+								xtype : 'colorpicker',
+								listeners : {
+									select : function(picker, selColor) {
+										var content = Ext.getCmp('content');
+										content.setFieldStyle('color:#' + selColor);
+										var c1 = Ext.getCmp('color2');
+										c1.setValue(selColor);
+									}
+								}
+							}]
 						}, clientType, pushType, timing, {
 							xtype : 'fieldcontainer',
 							fieldLabel : '勿扰控制',
@@ -407,7 +445,7 @@ Ext.define('Push.view.push.PushForm', {
 								allowBlank : false
 							}]
 						}]
-					}, contentType, configApp.tagTypes.length==0?null:userScope]
+					}, contentType, configApp.tagTypes.length == 0 ? null : userScope]
 				});
 				// ====================config=====================
 				// var cc = Ext.getCmp('contentType-config');
@@ -554,7 +592,9 @@ Ext.define('Push.view.push.PushForm', {
 			}
 			params.keyValue = keyValue;
 			params.tags = tags;
-			params.tagRelation = Ext.getCmp('tag-rel-radio')==undefined?null:Ext.getCmp('tag-rel-radio').getValue().tagRelation;
+			params.titleColor = Ext.getCmp('color1').getValue();
+			params.contentColor = Ext.getCmp('color2').getValue();
+			params.tagRelation = Ext.getCmp('tag-rel-radio') == undefined ? null : Ext.getCmp('tag-rel-radio').getValue().tagRelation;
 			var exp = "0";
 			var timmingDateField = Ext.getCmp('timmingDateField').getRawValue();
 			var timmingField = Ext.getCmp('timmingField').getRawValue();

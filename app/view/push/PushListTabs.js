@@ -248,6 +248,9 @@ Ext.define('Push.view.push.PushListTabs', {
 				tooltip : '更新',
 				handler : function(grid, rowIndex, colIndex) {
 					var rec = grid.getStore().getAt(rowIndex);
+					console.log(me.pushType);
+					if(me.pushType=='IMMEDIATE'||rec.get('sendState')=='待发送'){
+						console.log(rec);
 					var win = Ext.create('Push.view.push.PushForm', {
 						url : '/web/push/sendAgain',
 						ctId : rec.get('id'),
@@ -264,6 +267,11 @@ Ext.define('Push.view.push.PushListTabs', {
 					});
 					win.setPosition(600, 50);
 					win.show();
+					}else{
+							Ext.MessageBox.alert('提示', '定时任务已完成无法修改', function() {
+									}, this);
+					}
+					
 				}
 			}]
 		};

@@ -26,6 +26,8 @@ Ext.define('Push.view.push.AutoPushList', {
 			store : store,
 			items : ['-']
 		});
+		console.log("=======");
+		console.log(store);
 		me.pageBar.bindStore(store);
 		me.pageBar.doRefresh();
 		Ext.apply(this, {
@@ -91,7 +93,7 @@ Ext.define('Push.view.push.AutoPushList', {
 		}, {
 			text : "标题",
 			dataIndex : 'title',
-			width : 250,
+			width : 200,
 			sortable : false
 		}, {
 			text : "内容",
@@ -125,10 +127,14 @@ Ext.define('Push.view.push.AutoPushList', {
 				});
 				return dd;
 			},
-			width : 250
+			width : 200
 		}, {
 			text : "推送状态",
 			dataIndex : 'sendState',
+			width : 100
+		}, {
+			text : "APPID",
+			dataIndex : 'appId',
 			width : 100
 		}];
 	},

@@ -57,7 +57,7 @@ Ext.define('Push.view.push.AutoLocalForm', {
 								name : 'time',
 								xtype : 'numberfield',
 								minValue : 0,
-								maxValue : 24,
+								maxValue : 99999,
 								width : 50,
 								value : me.time,
 								allowBlank : false

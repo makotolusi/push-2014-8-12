@@ -78,6 +78,16 @@ Ext.define('Push.view.push.PushList', {
 			},
 			scope : this
 		});
+		var bar= Ext.create('Ext.PagingToolbar', {
+				store : store,
+				items : ['-']
+		});
+		store.on('beforeload', function (s, options) {
+       
+        Ext.apply(s.proxy.extraParams, {
+				pushType : me.pushType
+			});
+    	});
 		Ext.apply(this, {
 			id : 'push-list-grid-' + this.pushType,
 			store : store,
@@ -118,10 +128,7 @@ Ext.define('Push.view.push.PushList', {
 				}]
 			}],
 			// paging bar on the bottom
-			bbar : Ext.create('Ext.PagingToolbar', {
-				store : store,
-				items : ['-']
-			})
+			bbar :bar
 		});
 		this.callParent();
 	}
