@@ -34,17 +34,57 @@ Ext.define('Push.view.push.AutoLocalForm', {
 							maxLength : 20,
 							allowBlank : false,
 							name : 'title',
+							id:'title',
 							value : me.ctTitle,
 							fieldLabel : '推送标题'
 						}, {
+							xtype : 'splitbutton',
+							text : '标题颜色',
+							textAlign : 'right',
+							menu : [{
+								xtype : 'colorpicker',
+								listeners : {
+									select : function(picker, selColor) {
+										var title = Ext.getCmp('title');
+										title.setFieldStyle('color:#' + selColor);
+										var c1 = Ext.getCmp('color1');
+										c1.setValue(selColor);
+									}
+								}
+							}]
+						},{
+							xtype : 'hiddenfield',
+							id : "color1",
+							name:"titleColor"
+						}, {
+							xtype : 'hiddenfield',
+							id : "color2",
+							name:"contentColor"
+						},{
 							xtype : 'textareafield',
 							width : 550,
 							height : 150,
 							maxLength : 40,
 							allowBlank : false,
 							name : 'content',
+							id:'content',
 							value : me.ctContent,
 							fieldLabel : '推送内容'
+						}, {
+							xtype : 'splitbutton',
+							text : '内容颜色',
+							textAlign : 'right',
+							menu : [{
+								xtype : 'colorpicker',
+								listeners : {
+									select : function(picker, selColor) {
+										var content = Ext.getCmp('content');
+										content.setFieldStyle('color:#' + selColor);
+										var c1 = Ext.getCmp('color2');
+										c1.setValue(selColor);
+									}
+								}
+							}]
 						},{
 							xtype : 'fieldcontainer',
 							fieldLabel : '天数/次数',

@@ -248,7 +248,7 @@ Ext.define('Push.view.push.PushListTabs', {
 				tooltip : '更新',
 				handler : function(grid, rowIndex, colIndex) {
 					var rec = grid.getStore().getAt(rowIndex);
-					console.log(me.pushType);
+					console.log(rec.get('titleColor'));
 					if(me.pushType=='IMMEDIATE'||rec.get('sendState')=='待发送'){
 						console.log(rec);
 					var win = Ext.create('Push.view.push.PushForm', {
@@ -256,6 +256,8 @@ Ext.define('Push.view.push.PushListTabs', {
 						ctId : rec.get('id'),
 						ctTitle : rec.get('title'),
 						ctContent : rec.get('content'),
+						ctTitlec : rec.get('titleColor'),
+						ctContentc : rec.get('contentColor'),
 						ctClientType : rec.get('clientType'),
 						userScope : rec.get('userScope'),
 						keyValue : rec.get('keyValue'),

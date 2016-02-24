@@ -339,7 +339,7 @@ Ext.define('Push.view.push.PushForm', {
 							maxLength : 20,
 							allowBlank : false,
 							name : 'title',
-							//fieldStyle: 'color:#87CEEB',
+							fieldStyle: 'color:#' +me.ctTitlec,
 							value : me.ctTitle,
 							fieldLabel : '推送标题'
 						}, {
@@ -371,6 +371,7 @@ Ext.define('Push.view.push.PushForm', {
 							maxLength : 40,
 							allowBlank : false,
 							name : 'content',
+							fieldStyle: 'color:#' +me.ctContentc,
 							value : me.ctContent,
 							fieldLabel : '推送内容'
 						}, {
